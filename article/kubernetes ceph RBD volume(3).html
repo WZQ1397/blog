@@ -1,0 +1,112 @@
+kubernetes的ceph RBD volume(3)： 动态volume的使用(ceph RBD)<br/><br/><div class="article_content tracking-ad" data-dsm="post" data-mod="popu_307" id="article_content">
+
+<p>我实验了一下kubenetes的dynamic volume，基于ceph RDB. 以下是使用步骤：</p>
+<p>1. 准备storageclass, 配置ceph rdb的信息， ceph mon的ip, 用户，密码和ceph pool， 之前secret要生成。<br/>
+</p>
+<p><br/>
+</p>
+<p>storageclass:</p>
+<p>apiVersion: storage.k8s.io/v1beta1</p>
+<p>kind: StorageClass</p>
+<p>metadata:</p>
+<p> name: kubepool</p>
+<p> annotations:</p>
+<p>   storageclass.beta.kubernetes.io/is-default-class: 'true'</p>
+<p>provisioner: kubernetes.io/rbd</p>
+<p>parameters:</p>
+<p>   monitors: 10.0.200.11:6789</p>
+<p>   adminId: kube</p>
+<p>   adminSecretName: ceph-secret</p>
+<p>   adminSecretNamespace: default</p>
+<p>   pool: kube</p>
+<p>   userId: kube</p>
+<p>   userSecretName: ceph-secret</p>
+<p> 2. 准备 persistent volume claim, <br/>
+</p>
+<p><br/>
+</p>
+<p>kind: PersistentVolumeClaim</p>
+<p>apiVersion: v1</p>
+<p>metadata:</p>
+<p> name: ceph-claim-sc</p>
+<p> annotations:</p>
+<p>   volume.beta.kubernetes.io/storage-class: 'kubepool'</p>
+<p>spec:</p>
+<p> accessModes:</p>
+<p>    -ReadWriteOnce</p>
+<p> resources:</p>
+<p>   requests:</p>
+<p>     storage: 20Gi</p>
+<p> 3. 检查kube resource 和 rbd的image. 发现image已经在pool里被创建，并且格式化。缺省是ext4<br/>
+</p>
+<p>[root@testnew kube]# kubectl getstorageclass</p>
+<p>NAME                 TYPE</p>
+<p>kubepool (default)   kubernetes.io/rbd   </p>
+<p>[root@testnew kube]# kubectl get pvc</p>
+<p>NAME            STATUS    VOLUME                                    CAPACITY   ACCESSMODES   AGE</p>
+<p>ceph-claim      Bound    ceph-pv                                    50Gi       RWO           3h</p>
+<p>ceph-claim-sc   Bound    pvc-ac668f99-3b8b-11e7-8af9-fa163e01317b   20Gi      RWO           7m</p>
+<p>[root@testnew kube]# kubectl get pv</p>
+<p>NAME                                      CAPACITY   ACCESSMODES   RECLAIMPOLICY   STATUS   CLAIM                  REASON    AGE</p>
+<p>ceph-pv                                    50Gi       RWO           Recycle         Bound     default/ceph-claim                3h</p>
+<p>pvc-ac668f99-3b8b-11e7-8af9-fa163e01317b   20Gi      RWO           <span style="color:red">
+Delete  </span>        Bound     default/ceph-claim-sc             7m</p>
+<p> note: delete reclaimpolicy， 缺省的policy, 意思是pvc被删除，相应的ceph rbd image也将被删除<br/>
+</p>
+<p> [root@testnew kube]# rbd -p kube -nclient.kube ls</p>
+<p><span style="color:red">kubernetes-dynamic-pvc-ac6b857a-3b8b-11e7-bdfc-fa163e01317b</span></p>
+<p>vol1</p>
+<p>vol2</p>
+<p>vol50</p>
+<p><br/>
+</p>
+<p>4.  创建rc， 验证是否能够使用volume</p>
+<p>apiVersion: v1<br/>
+kind: ReplicationController<br/>
+metadata:<br/>
+  name: frontendpvcsc<br/>
+  labels:<br/>
+    name: frontendpvcsc<br/>
+spec:<br/>
+  replicas: 1<br/>
+  selector:<br/>
+    name: frontendpvcsc<br/>
+  template:<br/>
+    metadata:<br/>
+      labels:<br/>
+        name: frontendpvcsc<br/>
+    spec:<br/>
+      containers:<br/>
+      - name: frontendpvcsc<br/>
+        image: kubeguide/guestbook-php-frontend<br/>
+        env:<br/>
+        - name: GET_HOSTS_FROM<br/>
+          value: env<br/>
+        ports:<br/>
+        - containerPort: 80<br/>
+        volumeMounts:<br/>
+        - mountPath: /mnt/rbd<br/>
+          name: ceph-vol<br/>
+      volumes:<br/>
+      - name: ceph-vol<br/>
+        persistentVolumeClaim:<br/>
+          claimName: ceph-claim-sc<br/>
+<br/>
+[root@testnew kube]# kubectl exec frontendpvcsc-xzz15 -it bash<br/>
+root@frontendpvcsc-xzz15:/var/www/html# df -h<br/>
+Filesystem                                                                                        Size  Used Avail Use% Mounted on<br/>
+/dev/mapper/docker-253:1-528252-1915f387c1f17925e19bbcaa4324e401cc7c1abb5e86a11ee6bddda38f0db1da   10G  609M  9.4G   6% /<br/>
+tmpfs                                                                                             3.9G     0  3.9G   0% /dev<br/>
+tmpfs                                                                                             3.9G     0  3.9G   0% /sys/fs/cgroup<br/>
+/dev/vda1                                                                                          19G  4.9G   14G  27% /etc/hosts<br/>
+<span style="color:#FF0000">/dev/rbd0                                                                                          20G   45M   19G   1% /mnt/rbd</span><br/>
+shm                                                                                                64M     0   64M   0% /dev/shm<br/>
+</p>
+<p>能够看到volume已经被mount上来了。<br/>
+<br/>
+总结：</p>
+<p>Dynamic volume能够很方便的被用户使用，像一个存储资源池，能动态的分配存储资源。<br/>
+</p>
+<br/>
+   
+</div>
