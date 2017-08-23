@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<!-- saved from url=(0029)http://www.fblinux.com/?p=951 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta http-equiv="X-UA-Compatible" content="IE=10,IE=9,IE=8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<title>jmeter分布式压测和监控实践</title>
+<script>
+</script>
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/www.fblinux.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.3.11"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&&c.getContext("2d");return d&&d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length>3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&&c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script><script src="./jmeter分布式压测和监控实践_files/wp-emoji-release.min.js" type="text/javascript"></script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="style-css" href="./jmeter分布式压测和监控实践_files/style.css" type="text/css" media="all">
+<style type="text/css" id="custom-background-css">
+body.custom-background { background-color: #dbdbdb; }
+</style>
+<link rel="stylesheet" type="text/css" href="./jmeter分布式压测和监控实践_files/shCore.css"><link rel="stylesheet" type="text/css" href="./jmeter分布式压测和监控实践_files/shThemeMidnight.css"><style type="text/css" id="syntaxhighlighteranchor"></style>
+<!--[if lt IE 9]><script src="http://www.fblinux.com/wp-content/themes/yusi1.0/js/html5.js"></script><![endif]-->
+<script src="./jmeter分布式压测和监控实践_files/share.js"></script><script></script><link href="./jmeter分布式压测和监控实践_files/share.css" rel="styleSheet" type="text/css"><script type="text/javascript" charset="utf-8" src="./jmeter分布式压测和监控实践_files/getnum"></script></head>
+<body class="single single-post postid-951 single-format-standard custom-background">
+
+
+<section class="container">
+	<div class="content-wrap">
+	<div class="content">
+
+				
+		<article class="article-content">
+			<div style="clear:both;overflow:hidden;height:2em"></div>
+<h2 class="content-index-heading content-index-heading-level-1" name="" id="前言"><em>1.</em>前言</h2>
+<p>对于运维工程师来说，需要对自己维护的服务器性能瓶颈了如指掌，比如我当前的架构每秒并发是多少，我服务器最大能接受的并发是多少，是什么导致我的性能有问题；如果当前架构快达到性能瓶颈了，是横向扩容性能提升大，还是纵向扩容性能提升大。</p>
+<p>如果需要了解这些信息，需要在两方面下功夫，一个是对服务器进行性能测试，一个是对服务器进行性能监控。</p>
+<p><strong>通过对服务器进行性能测试：</strong>我们可以了解到当前架构的性能瓶颈，还可以对架构横向扩容和纵向扩容来进行测试，对后期的架构扩容提供数据参考。</p>
+<p><strong>通过对服务器进行性能监控：</strong>我们可以了解当前服务器的CPU、内存、IO等资源是否耗尽，我们可以在监控系统添加触发器，一旦服务器资源在快要达到瓶颈的时候，我们可以触发一个报警让运维人员来处理，也可以触发一个让架构进行自动化扩容（如果是云平台，直接调用api创建主机，ansible部署应用和程序）</p>
+<blockquote><p>本文将介绍下，我在工作中使用jmeter测试性能瓶颈的一些实践。本文做性能测试适用于移动互联网架构，非移动互联网架构有其他更好的测试方法。</p></blockquote>
+<h2 class="content-index-heading content-index-heading-level-1" name="" id="Jmeter分布式压测介绍"><em>2.</em><span lang="EN-US">Jmeter</span>分布式压测介绍</h2>
+<p>在工作中使用jmeter做大并发压力测试的场景下，单机受限内存、CPU、网络IO，会出现服务器压力还没有上去，但是压测服务器已经由于模拟的压力太大死机了。为了让jmeter工具提供更强大的负载能力，jmeter提供了多台机器同时产生负载的机制，下面是架构图。</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image001.png" data-original-title="" title=""><img class="alignnone wp-image-968 size-full" src="./jmeter分布式压测和监控实践_files/image001.png" alt="image001" width="1006" height="325"></a></p>
+<p><strong><span style="color: #ff0000;">原理：</span></strong>比如我在jmeter server配置线程数为10，循环次数为100，也就是会对测试服务器发起1000次请求，我有3台agent服务器，如果我在server端选择远程启动压力测试，那么每台agent都会对测试服务器发起10*100次请求，那么这次压力测试产生的请求就是10*100*3=3000次。</p>
+<p>如果对原理不是很明白，看完下面的操作之后就会理解了。</p>
+<h2 class="content-index-heading content-index-heading-level-1" name="" id="Jmeter分布式压测环境搭建"><em>3.</em><span lang="EN-US">Jmeter</span>分布式压测环境搭建</h2>
+<h3 class="content-index-heading content-index-heading-level-2" name="" id="搭建前说明"><em>3.1.</em>搭建前说明</h3>
+<p>服务器环境说明：做性能测试可以直接在在云平台按需购买压力机，一旦测试结束释放压力机即可。</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image002.png" data-original-title="" title=""><img class="alignnone wp-image-969 size-full" src="./jmeter分布式压测和监控实践_files/image002.png" alt="image002" width="1470" height="246"></a></p>
+<p>分布式环境压力服务器要求：</p>
+<ul>
+<li>需要server（控制机）和agent（压力机），agent搭建在linux（centos 6.5）服务器环境下，server搭建在windows（server 2012）环境下。</li>
+<li>压力测试瓶颈大都在带宽上面，需要保证压力机的带宽要比服务器的带宽高，不然压力上不去。</li>
+<li>需要保证agent和server都在一个网络中，且在多网卡环境需要保证启动的网卡都在一个网段。</li>
+<li>需要保证server和agent之间的时间同步。</li>
+<li>关闭防火墙。</li>
+</ul>
+<h3 class="content-index-heading content-index-heading-level-2" name="" id="Windows部署jmeter"><em>3.2.</em><span lang="EN-US">Windows</span>部署<span lang="EN-US">jmeter</span></h3>
+<p>（1）部署jdk环境,配置path变量，安装完成效果如下</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image003.png" data-original-title="" title=""><img class="alignnone wp-image-970 size-full" src="./jmeter分布式压测和监控实践_files/image003.png" alt="image003" width="516" height="71"></a></p>
+<p>（2）直接去<a href="http://jmeter.apache.org/download_jmeter.cgi" data-original-title="" title="">官网下载</a>最新的二进制源码包即可。</p>
+<p>（3）解压jmeter到指定目录，设置path变量，安装完成之后，在命令行运行jmeter命令，如果可以正常启动jmeter，说明环境配置ok。</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image004.png" data-original-title="" title=""><img class="alignnone wp-image-971 size-full" src="./jmeter分布式压测和监控实践_files/image004.png" alt="image004" width="857" height="570"></a></p>
+<h3 class="content-index-heading content-index-heading-level-2" name="" id="Linux部署jmeter"><em>3.3.</em><span lang="EN-US">Linux</span>部署<span lang="EN-US">jmeter</span></h3>
+<p>（1）下载安装</p>
+<div><div id="highlighter_816073" class="syntaxhighlighter  bash"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="bash plain">wget http:</code><code class="bash plain">//mirrors</code><code class="bash plain">.tuna.tsinghua.edu.cn</code><code class="bash plain">/apache//jmeter/binaries/apache-jmeter-3</code><code class="bash plain">.1.zip</code></div><div class="line number2 index1 alt1"><code class="bash plain">unzip apache-jmeter-3.1.zip -d </code><code class="bash plain">/usr/local/</code></div><div class="line number3 index2 alt2"><code class="bash functions">cd</code> <code class="bash plain">/usr/local/</code></div><div class="line number4 index3 alt1"><code class="bash functions">ln</code> <code class="bash plain">-s apache-jmeter-3.1/ jmeter</code></div></div></td></tr></tbody></table></div></div>
+<p>（2）配置启动脚本</p>
+<div><div id="highlighter_175178" class="syntaxhighlighter  bash"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div><div class="line number15 index14 alt2">15</div><div class="line number16 index15 alt1">16</div><div class="line number17 index16 alt2">17</div><div class="line number18 index17 alt1">18</div><div class="line number19 index18 alt2">19</div><div class="line number20 index19 alt1">20</div><div class="line number21 index20 alt2">21</div><div class="line number22 index21 alt1">22</div><div class="line number23 index22 alt2">23</div><div class="line number24 index23 alt1">24</div><div class="line number25 index24 alt2">25</div><div class="line number26 index25 alt1">26</div><div class="line number27 index26 alt2">27</div><div class="line number28 index27 alt1">28</div><div class="line number29 index28 alt2">29</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="bash preprocessor bold">#!/bin/bash</code></div><div class="line number2 index1 alt1"><code class="bash comments"># chkconfig: 345 26 74</code></div><div class="line number3 index2 alt2"><code class="bash comments"># description: jmeter agent</code></div><div class="line number4 index3 alt1"><code class="bash plain">myip=`</code><code class="bash functions">ifconfig</code> <code class="bash plain">eth0 |</code><code class="bash functions">awk</code> <code class="bash string">'/inet addr/{gsub(/addr:/,"");print $2}'</code><code class="bash plain">`</code></div><div class="line number5 index4 alt2"><code class="bash plain">cmd=</code><code class="bash string">"/usr/local/jmeter/bin/jmeter-server -Djava.rmi.server.hostname=$myip"</code></div><div class="line number6 index5 alt1"><code class="bash plain">start(){</code></div><div class="line number7 index6 alt2"><code class="bash spaces">&nbsp;&nbsp;</code><code class="bash plain">$cmd &amp; </code></div><div class="line number8 index7 alt1"><code class="bash plain">}</code></div><div class="line number9 index8 alt2">&nbsp;</div><div class="line number10 index9 alt1"><code class="bash plain">stop(){</code></div><div class="line number11 index10 alt2"><code class="bash spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="bash plain">jmeter_pid=`</code><code class="bash functions">ps</code> <code class="bash plain">aux | </code><code class="bash functions">grep</code> <code class="bash plain">jmeter-server | </code><code class="bash functions">grep</code> <code class="bash plain">-</code><code class="bash functions">v</code> <code class="bash functions">grep</code> <code class="bash plain">| </code><code class="bash functions">awk</code> <code class="bash string">'{print $2}'</code><code class="bash plain">`</code></div><div class="line number12 index11 alt1"><code class="bash spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="bash keyword">for</code> <code class="bash plain">pid </code><code class="bash keyword">in</code> <code class="bash plain">$jmeter_pid;</code><code class="bash keyword">do</code></div><div class="line number13 index12 alt2"><code class="bash spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="bash functions">kill</code> <code class="bash plain">-9 $pid</code></div><div class="line number14 index13 alt1"><code class="bash spaces">&nbsp;&nbsp;&nbsp;&nbsp;</code><code class="bash keyword">done</code></div><div class="line number15 index14 alt2"><code class="bash plain">}</code></div><div class="line number16 index15 alt1">&nbsp;</div><div class="line number17 index16 alt2"><code class="bash plain">act=$1</code></div><div class="line number18 index17 alt1"><code class="bash keyword">case</code> <code class="bash plain">$act </code><code class="bash keyword">in</code></div><div class="line number19 index18 alt2"><code class="bash spaces">&nbsp;</code><code class="bash string">'start'</code><code class="bash plain">)</code></div><div class="line number20 index19 alt1"><code class="bash spaces">&nbsp;&nbsp;&nbsp;</code><code class="bash plain">start;;</code></div><div class="line number21 index20 alt2"><code class="bash spaces">&nbsp;</code><code class="bash string">'stop'</code><code class="bash plain">)</code></div><div class="line number22 index21 alt1"><code class="bash spaces">&nbsp;&nbsp;&nbsp;</code><code class="bash plain">stop;;</code></div><div class="line number23 index22 alt2"><code class="bash spaces">&nbsp;</code><code class="bash string">'restart'</code><code class="bash plain">)</code></div><div class="line number24 index23 alt1"><code class="bash spaces">&nbsp;&nbsp;&nbsp;</code><code class="bash plain">stop</code></div><div class="line number25 index24 alt2"><code class="bash spaces">&nbsp;&nbsp;&nbsp;</code><code class="bash functions">sleep</code> <code class="bash plain">2</code></div><div class="line number26 index25 alt1"><code class="bash spaces">&nbsp;&nbsp;&nbsp;</code><code class="bash plain">start;;</code></div><div class="line number27 index26 alt2"><code class="bash spaces">&nbsp;&nbsp;</code><code class="bash plain">*)</code></div><div class="line number28 index27 alt1"><code class="bash spaces">&nbsp;&nbsp;&nbsp;</code><code class="bash functions">echo</code> <code class="bash string">'[start|stop|restart]'</code><code class="bash plain">;;</code></div><div class="line number29 index28 alt2"><code class="bash keyword">esac</code></div></div></td></tr></tbody></table></div></div>
+<p>（3）启动jmeter agent服务，验证是否监听1099端口</p>
+<div><div id="highlighter_514508" class="syntaxhighlighter  bash"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="bash plain">[root@jmeter-agent-01 ~]</code><code class="bash comments"># /etc/init.d/jmeter-agent start</code></div><div class="line number2 index1 alt1"><code class="bash plain">[root@jmeter-agent-01 ~]</code><code class="bash comments"># netstat -lntp | grep 1099</code></div><div class="line number3 index2 alt2"><code class="bash plain">tcp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 0.0.0.0:1099&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0.0.0:*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LISTEN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 414</code><code class="bash plain">/java</code></div></div></td></tr></tbody></table></div></div>
+<h3 class="content-index-heading content-index-heading-level-2" name="" id="分布式环境配置"><em>3.4.</em>分布式环境配置</h3>
+<p>（1）确保server和agnet安装正确。</p>
+<p>（2）Agent启动，并监听1099端口。</p>
+<p>（3）在server机器的jmeter安装目录下bin目录下，找到properties文件，修改远程主机选项，添加3个agent服务器的地址。</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image005.png" data-original-title="" title=""><img class="alignnone wp-image-972 size-full" src="./jmeter分布式压测和监控实践_files/image005.png" alt="image005" width="692" height="48"></a></p>
+<p>（4）启动jmeter server，多网卡模式需要指定IP地址启动</p>
+<div><div id="highlighter_796588" class="syntaxhighlighter  bash"><table border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="bash plain">jmeter -Djava.rmi.server.</code><code class="bash functions">hostname</code><code class="bash plain">=192.168.10.61</code></div></div></td></tr></tbody></table></div></div>
+<p>（5）验证分布式环境是否搭建成功</p>
+<p>1、jmeter启动之后在如下选项中,会出现你添加的远程主机列表</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image006.png" data-original-title="" title=""><img class="alignnone wp-image-973 size-full" src="./jmeter分布式压测和监控实践_files/image006.png" alt="image006" width="441" height="386"></a></p>
+<p>2、创建一个请求测试：创建一个访问百度的请求，访问次数为一次，配置如下：</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image007.png" data-original-title="" title=""><img class="alignnone wp-image-974 size-full" src="./jmeter分布式压测和监控实践_files/image007.png" alt="image007" width="517" height="293"></a></p>
+<p><a href="./jmeter分布式压测和监控实践_files/image008.png" data-original-title="" title=""><img class="alignnone wp-image-975 size-full" src="./jmeter分布式压测和监控实践_files/image008.png" alt="image008" width="521" height="266"></a></p>
+<p>直接点击启动，是jmeter server机器发起一次请求，结果如下</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image009.png" data-original-title="" title=""><img class="alignnone wp-image-976 size-full" src="./jmeter分布式压测和监控实践_files/image009.png" alt="image009" width="813" height="540"></a></p>
+<p>请求所有之前的请求数据之后，在选择远程全部启动，查看发起的请求就是三次，也就是每个agent服务器按照着server的配置，请求了一次。</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image010.png" data-original-title="" title=""><img class="alignnone size-full wp-image-977" src="./jmeter分布式压测和监控实践_files/image010.png" alt="image010" width="260" height="96"></a></p>
+<p><a href="./jmeter分布式压测和监控实践_files/image011.png" data-original-title="" title=""><img class="alignnone wp-image-978 size-full" src="./jmeter分布式压测和监控实践_files/image011.png" alt="image011" width="768" height="412"></a></p>
+<p>如果你的环境在选择全部启动之后，没有报错，且发起请求数量和agent服务器数量一致，说明jmeter分布式压力测试环境搭建成功，可以进行测试了。</p>
+<h2 class="content-index-heading content-index-heading-level-1" name="" id="Jmeter断言"><em>4.</em><span lang="EN-US">Jmeter</span>断言</h2>
+<h3 class="content-index-heading content-index-heading-level-2" name="" id="断言介绍"><em>4.1.</em>断言介绍</h3>
+<p>jmeter断言常用有两种，一种是响应断言，一种是响应时间断言，如果响应内容不满足断言的配置，则认为这次的请求是失败的。</p>
+<p>响应断言：判断响应内容是否包含指定的字符信息，用于判断api接口返回内容是否正确。</p>
+<p>响应时间断言：判断响应时间，是否超过预期的时间，用于判断api接口返回时间是否超过预期。</p>
+<h3 class="content-index-heading content-index-heading-level-2" name="" id="断言配置"><em>4.2.</em>断言配置</h3>
+<p>（1）修改http为实际的api测试请求。</p>
+<p>（2）断言添加方式：右击测试计划的http请求，选择添加à断言à添加响应断言和断言持续时间。</p>
+<p><img class="alignnone wp-image-954 size-full" src="./jmeter分布式压测和监控实践_files/image013.png" alt="image013" width="539" height="421"></p>
+<p>（3）配置响应断言：我们接口正常返回code值为2000，如果接口返回code值不是2000表示接口异常，为了测试，这里修改为接口返回code值不为2222则表示访问失败。</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image014.png" data-original-title="" title=""><img class="alignnone wp-image-955 size-full" src="./jmeter分布式压测和监控实践_files/image014.png" alt="image014" width="847" height="345"></a></p>
+<p>（4）配置断言响应时间：设置请求接口时间超过1毫秒，则认为请求失败。</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image015.png" data-original-title="" title=""><img class="alignnone wp-image-956 size-full" src="./jmeter分布式压测和监控实践_files/image015.png" alt="image015" width="737" height="218"></a></p>
+<p>（5）验证断言配置：发起http请求，由于返回内容code值不为2222，以及访问时间超过1毫秒，所以认为访问失败。</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image016.png" data-original-title="" title=""><img class="alignnone wp-image-957 size-full" src="./jmeter分布式压测和监控实践_files/image016.png" alt="image016" width="915" height="316"></a> <a href="./jmeter分布式压测和监控实践_files/image017.png" data-original-title="" title=""><img class="alignnone wp-image-958 size-full" src="./jmeter分布式压测和监控实践_files/image017.png" alt="image017" width="962" height="310"></a></p>
+<h2 class="content-index-heading content-index-heading-level-1" name="" id="Jmeter变量配置"><em>5.</em><span lang="EN-US">Jmeter</span>变量配置</h2>
+<p>使用变量的场景举例：我们需要测试性能的曲线模型，也就是由轻压力慢慢变为重压力，来测试我们的性能拐点，这个时候jmeter就需要配置多个线程组，每个线程组需要设置http请求，比如下图；由于每次测试性能的曲线模型都是同一个接口，所以每次修改接口都需要修改http请求，这个时候如果使用了变量，就意味着每次修改api只需要修改api的变量即可。</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image018.png" data-original-title="" title=""><img class="alignnone wp-image-959 size-full" src="./jmeter分布式压测和监控实践_files/image018.png" alt="image018" width="239" height="610"></a></p>
+<p>设置变量的方法：在测试计划中</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image019.png" data-original-title="" title=""><img class="alignnone wp-image-960 size-full" src="./jmeter分布式压测和监控实践_files/image019.png" alt="image019" width="1123" height="190"></a></p>
+<p>引用变量：</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image020.png" data-original-title="" title=""><img class="alignnone wp-image-961 size-full" src="./jmeter分布式压测和监控实践_files/image020.png" alt="image020" width="841" height="297"></a></p>
+<h2 class="content-index-heading content-index-heading-level-1" name="" id="Jmeter性能测试结果分析"><em>6.</em><span lang="EN-US">Jmeter</span>性能测试结果分析</h2>
+<p>下面是我执行一次性能曲线模型测试（请求从每秒3千递增到3万）的聚合报告：简单的看下，可以看到性能的拐点在每秒发起2.7万请求，TPS处理能力可以达到6000每秒，99%的用户响应时间在60毫秒，最大响应时间为71毫秒，性能还是不错的。</p>
+<p><strong><span style="color: #ff0000;">并发瓶颈：</span></strong>当请求从每秒2.7万递增到3万的过程中，我们的TPS由6000下降到了4500，可以看到并发瓶颈就在每秒最多处理6000请求</p>
+<p><span style="color: #ff0000;"><strong>响应时间：</strong></span>我们可以看到TPS保持在3500或之下，99%用户用户的响应时间为11毫秒，随着TPS的升高，我们的响应时间也在随着升高，可以看到我们的TPS在每秒3500响应的时候，对响应时间是没有影响的。</p>
+<blockquote><p>注意这个只是我的业务其中的一个接口，我们生产有上百个接口，不同的接口返回数据还有代码逻辑，以及执行的sql均不相同，如果需要做性能测试，应该选择其中的热点接口，对每个接口进行性能测试，得到结果之后在进行具体的分析性能瓶颈到低是什么？</p></blockquote>
+<p><a href="./jmeter分布式压测和监控实践_files/image021.png" data-original-title="" title=""><img class="alignnone wp-image-962 size-full" src="./jmeter分布式压测和监控实践_files/image021.png" alt="image021" width="1359" height="606"></a><br>
+聚合报告参数说明：单位为毫秒<br>
+<strong>Label：</strong>定义HTTP请求名称<br>
+<strong>Samples：</strong>表示这次测试中发出了多少个请求<br>
+<strong>Average：</strong>平均响应时长——默认情况下是单个request的平均响应时长<br>
+<strong>Median：</strong>中位数，也就是50%用户的响应时长<br>
+<strong>90% Line：</strong>90%用户的响应时长<br>
+<strong>Min：</strong>访问页面的最小响应时长<br>
+<strong>Max：</strong>访问页面的最大响应时长<br>
+<strong>Error%：</strong>错误请求的数量/请求的总数<br>
+<strong>Throughput：</strong>默认情况下表示每秒完成的请求数（request per second）<br>
+<strong>KB/Sec：</strong>每秒从服务器端接收到的数据量</p>
+<h2 class="content-index-heading content-index-heading-level-1" name="" id="测试中的监控"><em>7.</em>测试中的监控</h2>
+<h3 class="content-index-heading content-index-heading-level-2" name="" id="并发测试监控"><em>7.1.</em>并发测试监控</h3>
+<p>并发测试直接发起指定数量的请求，比如一起发起10万请求看一下系统的处理能力，这个时候如果需要服务器的资源使用信息，就不能使用比如zabbix监控系统了，因为一般处理10万请求，对于我们来说20秒可以处理完毕，但是zabbix数据采集是每分钟一次，这样采集到的数据明显是不准的，这样就需要通过系统自带的监控命令，来实时查询服务器的性能，比如可以通过dstat或者glances等动态监控命令来分析系统的性能。</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image022.png" data-original-title="" title=""><img class="alignnone wp-image-963 size-full" src="./jmeter分布式压测和监控实践_files/image022.png" alt="image022" width="448" height="144"></a></p>
+<blockquote><p>补充：不是测试每一个接口都需要进行这样的实时监控，比如过测试我的大部分接口TPS可达5000，但是其中一个接口只能达到2000这个时候就需要在测试的时候实时监控，看一下到底是什么原因导致性能上不去。是由于返回数据太大导致网络带宽被占满；还是sql执行时间太长导致数据库负载高，还是代码有问题导致web服务cpu占用高。</p></blockquote>
+<h3 class="content-index-heading content-index-heading-level-2" name="" id="稳定性测试监控"><em>7.2.</em>稳定性测试监控</h3>
+<p>稳定性测试就是持续不断模拟指定数量请求，来访问服务器，比如我每秒向测试服务器发起4000请求，持续12小时，来看看服务器会出现什么情况，这个时候就需要用到zabbix来进行监控了，下面是我做性能测试的部分监控接口，包含tomcat每秒请求，服务器入口流量，整个集群每分钟请求的http状态码统计，还有服务器资源使用信息。</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image023.png" data-original-title="" title=""><img class="alignnone wp-image-964 size-full" src="./jmeter分布式压测和监控实践_files/image023.png" alt="image023" width="1283" height="376"></a> <a href="./jmeter分布式压测和监控实践_files/image024.png" data-original-title="" title=""><img class="alignnone wp-image-965 size-full" src="./jmeter分布式压测和监控实践_files/image024.png" alt="image024" width="1295" height="379"></a> <a href="./jmeter分布式压测和监控实践_files/image025.png" data-original-title="" title=""><img class="alignnone wp-image-966 size-full" src="./jmeter分布式压测和监控实践_files/image025.png" alt="image025" width="1291" height="393"></a> <a href="./jmeter分布式压测和监控实践_files/image026.png" data-original-title="" title=""><img class="alignnone wp-image-967 size-full" src="./jmeter分布式压测和监控实践_files/image026.png" alt="image026" width="1523" height="936"></a></p>
+<h2 class="content-index-heading content-index-heading-level-1" name="" id="Jmeter分布式压力测试"><em>8.</em><span lang="EN-US">Jmeter</span>分布式压力测试</h2>
+<p>测试架构如下：</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image032.png"><img class="alignnone wp-image-362 size-full" src="./jmeter分布式压测和监控实践_files/image032.png" alt="image032" width="659" height="292" /></a><br />
+测试前的准备：<br />
+1、 防火墙关闭<br />
+2、 主机名解析<br />
+3、 时间同步<br />
+（1）压力机安装Jmeter，步骤和上面安装Jmeter步骤相同<br />
+（2）在controller机器的jmeter的bin目录下，找到jmeter.properties文件，修改远程主机选项</p>
+<pre class="brush: bash; title: ; notranslate" title="">[root@jmeter~]# vim /usr/local/jmeter/bin/jmeter.properties
+remote_hosts=172.16.4.102,172.16.4.103</pre>
+<p>（3）Agent启动服务，如果启动1099端口说明jmeter的压力机启动正常</p>
+<pre class="brush: bash; title: ; notranslate" title="">[root@agent-01 ~]# /usr/local/jmeter/bin/jmeter-server &amp;
+[root@agent-01 ~]# netstat -lntp | grep 1099
+tcp        0      0 :::1099                     :::*                        LISTEN      47783/java</pre>
+<p>（4）启动controller机器上的jmeter应用，选择菜单“运行”&#8211;&gt;“远程启动”来分别启动agent，也可以直接选择“远程全部启动来将所有的agent启动</p>
+<p><a href="./jmeter分布式压测和监控实践_files/image033.png"><img class="alignnone wp-image-363 size-full" src="./jmeter分布式压测和监控实践_files/image033.png" alt="image033" width="591" height="134" /></a></p>
+
+
+      
+
+	</article>	
+				
+	
+
+		
+									</div>
+</div>
+
+</section>
+
+
+
+
+
+
+
+</body></html>
