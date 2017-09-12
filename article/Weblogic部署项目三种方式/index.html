@@ -1,0 +1,221 @@
+
+       
+    <title>Weblogic部署项目三种方式</title>
+
+    <link rel="Stylesheet" type="text/css" href="../Weblogic_files/style.css">
+
+    <link type="text/css" rel="stylesheet" href="../Weblogic_files/default.css">
+ 
+        
+
+    
+        
+    
+
+    
+
+
+
+
+        <div id="body">
+         
+<div id="article_details" class="details">
+    <h1>
+        Weblogic部署项目三种方式        
+    </h1>
+</div>
+
+<div id="article_content" class="article_content tracking-ad" data-mod="popu_307" data-dsm="post">
+
+<p><br>
+</p>
+<p><span style="font-family:SimSun; font-size:18px">&nbsp;&nbsp;&nbsp; 在weblogic中部署项目通常有三种方式：第一，在控制台中安装部署；第二，将部署包放在domain域中autodeploy目录下部署；第三，使用域中配置文件config.xml 进行项目的部署。</span></p>
+<p><br>
+</p>
+<h1><a name="t0" target="_blank"></a><span style="font-family:SimSun; color:#FF6600">控制台部署</span></h1>
+<p><br>
+</p>
+<p><span style="font-size:18px">1&nbsp; 启动weblogic服务，登录到weblogic控制台页面，输入用户名和密码，登录到控制台里面</span></p>
+<p><img src="../Weblogic_files/20150531005427606" alt="" height="500" width="858"></p>
+<p><br>
+</p>
+<p><span style="font-size:18px">2&nbsp; 点击左侧的部署</span><br>
+</p>
+<p><img src="../Weblogic_files/20150531005610903" alt="" height="637" width="858"></p>
+<p><span style="font-size:18px"><br>
+</span></p>
+<p><span style="font-size:18px">3&nbsp; 在右侧点击安装按钮，准备进行项目安装</span><br>
+</p>
+<p><img src="../Weblogic_files/20150531005455327" alt="" height="495" width="857"></p>
+<p><span style="font-size:18px"><br>
+</span></p>
+<p><span style="font-size:18px">4&nbsp; 看到路径输入框，可以在下面选择要部署的项目的位置</span><br>
+</p>
+<p><img src="../Weblogic_files/20150531005507917" alt="" height="576" width="858"></p>
+<p><br>
+</p>
+<p><span style="font-size:18px">5&nbsp; 也可以直接输入要部署的包的位置，敲回车</span><br>
+</p>
+<p><img src="../Weblogic_files/20150531005522955" alt="" height="595" width="858"></p>
+<p><br>
+</p>
+<p><span style="font-size:18px">6&nbsp; 点击下一步即可</span><br>
+</p>
+<p><img src="../Weblogic_files/20150531005538602" alt="" height="398" width="858"></p>
+<p><br>
+</p>
+<p><span style="font-size:18px">7&nbsp; 继续下一步</span><br>
+</p>
+<p><img src="../Weblogic_files/20150531005620472" alt="" height="512" width="859"></p>
+<p><br>
+</p>
+<p><span style="font-size:18px">8&nbsp; 点击完成按钮</span><br>
+</p>
+<p><img src="../Weblogic_files/20150531005633561" alt="" height="627" width="858"></p>
+<p><br>
+</p>
+<p><span style="font-size:18px">9&nbsp;&nbsp; 保存前面各步的设置</span><br>
+</p>
+<p><img src="../Weblogic_files/20150531005650518" alt="" height="609" width="858"></p>
+<p><br>
+</p>
+<p><span style="font-size:18px">10&nbsp; 保存完成后，会看到激活更改的提示，且不需要重启。</span><br>
+</p>
+<p><img src="../Weblogic_files/20150531005707241" alt="" height="557" width="858"></p>
+<p><br>
+</p>
+<p><span style="font-size:18px">11&nbsp; 这时便可以进行测试了，输入项目名称，看到了项目的欢迎页面，即项目部署成功。</span><br>
+</p>
+<p><img src="../Weblogic_files/20150531005917923" alt="" height="225" width="858"></p>
+<p><br>
+</p>
+<p><span style="font-size:18px">如果前面的步骤操作完成了，但依然无法访问项目的话，可以参考下面的补充步骤<br>
+</span></p>
+<p><span style="font-size:18px">补充步骤</span></p>
+<p><span style="font-size:18px">补1&nbsp; 点击部署，勾选上项目，点击启动</span><br>
+</p>
+<p><img src="./Weblogic_files/20150531005854173" alt="" height="483" width="858"></p>
+<p><br>
+</p>
+<p><span style="font-size:18px">补2&nbsp; 待启动后，项目状态为活动，健康状况为OK时，继续测试。</span><br>
+</p>
+<p><img src="../Weblogic_files/20150531005742965" alt="" height="455" width="858"><br>
+</p>
+<p><br>
+</p>
+<h1><a name="t1" target="_blank"></a><span style="font-family:SimSun; color:#FF6600">autodeploy自动部署</span></h1>
+<p><br>
+</p>
+<p><span style="font-size:18px">自动部署时不需要登录控制台，在domain域的主目录下面有个autodeploy目录，直接将项目包拷贝到autodeploy目录下面就可以了。</span></p>
+<p><span style="font-size:18px">autodeploy目录里面有个readme.txt 文档，打开看一下，这里摘第一段出来</span></p>
+<p></p>
+<div class="dp-highlighter bg_html"><div class="bar"><div class="tools"><b>[html]</b> <a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 381px; top: 8103px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_1" src="http://static.blog.csdn.net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_1" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=1&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1" class="dp-xml"><li class="alt"><span><span>This&nbsp;autodeploy&nbsp;directory&nbsp;provides&nbsp;a&nbsp;quick&nbsp;way&nbsp;to&nbsp;deploy&nbsp;applications&nbsp;&nbsp;</span></span></li><li class=""><span>to&nbsp;a&nbsp;development&nbsp;server.&nbsp;When&nbsp;the&nbsp;WebLogic&nbsp;Server&nbsp;instance&nbsp;is&nbsp;running&nbsp;&nbsp;</span></li><li class="alt"><span>in&nbsp;development&nbsp;mode,&nbsp;applications&nbsp;and&nbsp;modules&nbsp;in&nbsp;this&nbsp;directory&nbsp;are&nbsp;&nbsp;&nbsp;</span></li><li class=""><span>automatically&nbsp;deployed.&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="html" style="display: none;">This autodeploy directory provides a quick way to deploy applications
+to a development server. When the WebLogic Server instance is running
+in development mode, applications and modules in this directory are 
+automatically deployed.</pre><br>
+<span style="font-size:18px">主要说什么呢，就是开发模式下面，当weblogic启动时，会自动部署autodeploy目录下面的项目。</span>
+<p><span style="font-size:18px"><br>
+</span></p>
+<p><span style="font-size:18px">将部署包servletDemo.war 丢到autodeploy目录下面，启动startWeblogic.cmd ，进行servletDemo的访问，依然可以看到</span></p>
+<p><img src="./Weblogic_files/20150531011714880" alt="" height="225" width="858"></p>
+<p><span style="font-size:18px">欢迎页面。</span></p>
+<p><br>
+</p>
+<h1><a name="t2" target="_blank"></a><span style="font-family:SimSun; color:#FF6600">config.xml配置文件部署</span></h1>
+<p><br>
+</p>
+<p><span style="font-size:18px">config.xml文件在domain域的config目录下面，config.xml主要配置了domain域的一些相关信息</span></p>
+<p><span style="font-size:18px">我们要部署项目，该在哪里配置呢</span></p>
+<p></p>
+<div class="dp-highlighter bg_html"><div class="bar"><div class="tools"><b>[html]</b> <a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 381px; top: 8807px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_2" src="http://static.blog.csdn.net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_2" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=2&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1" class="dp-xml"><li class="alt"><span><span class="tag">&lt;?</span><span class="tag-name">xml</span><span>&nbsp;</span><span class="attribute">version</span><span>=</span><span class="attribute-value">'1.0'</span><span>&nbsp;</span><span class="attribute">encoding</span><span>=</span><span class="attribute-value">'UTF-8'</span><span class="tag">?&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span><span class="tag">&lt;</span><span class="tag-name">domain</span><span>&nbsp;</span><span class="attribute">xmlns</span><span>=</span><span class="attribute-value">"http://xmlns.oracle.com/weblogic/domain"</span><span>&nbsp;</span><span class="attribute">xmlns:sec</span><span>=</span><span class="attribute-value">"http://xmlns.oracle.com/weblogic/security"</span><span>&nbsp;</span><span class="attribute">xmlns:wls</span><span>=</span><span class="attribute-value">"http://xmlns.oracle.com/weblogic/security/wls"</span><span>&nbsp;</span><span class="attribute">xmlns:xsi</span><span>=</span><span class="attribute-value">"http://www.w3.org/2001/XMLSchema-instance"</span><span>&nbsp;</span><span class="attribute">xsi:schemaLocation</span><span>=</span><span class="attribute-value">"http://xmlns.oracle.com/weblogic/security/xacml&nbsp;http://xmlns.oracle.com/weblogic/security/xacml/1.0/xacml.xsd&nbsp;http://xmlns.oracle.com/weblogic/security/providers/passwordvalidator&nbsp;http://xmlns.oracle.com/weblogic/security/providers/passwordvalidator/1.0/passwordvalidator.xsd&nbsp;http://xmlns.oracle.com/weblogic/domain&nbsp;http://xmlns.oracle.com/weblogic/1.0/domain.xsd&nbsp;http://xmlns.oracle.com/weblogic/security&nbsp;http://xmlns.oracle.com/weblogic/1.0/security.xsd&nbsp;http://xmlns.oracle.com/weblogic/security/wls&nbsp;http://xmlns.oracle.com/weblogic/security/wls/1.0/wls.xsd"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">name</span><span class="tag">&gt;</span><span>base_domain</span><span class="tag">&lt;/</span><span class="tag-name">name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">domain-version</span><span class="tag">&gt;</span><span>12.1.3.0.0</span><span class="tag">&lt;/</span><span class="tag-name">domain-version</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">security-configuration</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">name</span><span class="tag">&gt;</span><span>base_domain</span><span class="tag">&lt;/</span><span class="tag-name">name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">realm</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">sec:authentication-provider</span><span>&nbsp;</span><span class="attribute">xsi:type</span><span>=</span><span class="attribute-value">"wls:default-authenticatorType"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">sec:name</span><span class="tag">&gt;</span><span>DefaultAuthenticator</span><span class="tag">&lt;/</span><span class="tag-name">sec:name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">sec:authentication-provider</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">sec:password-validator</span><span>&nbsp;</span><span class="attribute">xmlns:pas</span><span>=</span><span class="attribute-value">"http://xmlns.oracle.com/weblogic/security/providers/passwordvalidator"</span><span>&nbsp;</span><span class="attribute">xsi:type</span><span>=</span><span class="attribute-value">"pas:system-password-validatorType"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">sec:name</span><span class="tag">&gt;</span><span>SystemPasswordValidator</span><span class="tag">&lt;/</span><span class="tag-name">sec:name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">pas:min-password-length</span><span class="tag">&gt;</span><span>8</span><span class="tag">&lt;/</span><span class="tag-name">pas:min-password-length</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">pas:min-numeric-or-special-characters</span><span class="tag">&gt;</span><span>1</span><span class="tag">&lt;/</span><span class="tag-name">pas:min-numeric-or-special-characters</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">sec:password-validator</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">realm</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">default-realm</span><span class="tag">&gt;</span><span>myrealm</span><span class="tag">&lt;/</span><span class="tag-name">default-realm</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">credential-encrypted</span><span class="tag">&gt;</span><span>{AES}xLPXh4gcT6JErTB+toxRZ1pQpAS+MGMuqnnXzu/OsxWMQTB8152ggdbUlhkSXUGC9f959oL7tIzyZiu9XdeajlkK9vAu9cQlCKLLUaUMyl5Ty4C0uuJA99b14eR7oIu4</span><span class="tag">&lt;/</span><span class="tag-name">credential-encrypted</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">node-manager-username</span><span class="tag">&gt;</span><span>weblogic</span><span class="tag">&lt;/</span><span class="tag-name">node-manager-username</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">node-manager-password-encrypted</span><span class="tag">&gt;</span><span>{AES}n3LLdgmAsocPRoYUrFfR2waWOlEz6KDFsp7+</span><span class="attribute">gByNeo8</span><span>=</span><span class="tag">&lt;/</span><span class="tag-name">node-manager-password-encrypted</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">security-configuration</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">server</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">name</span><span class="tag">&gt;</span><span>AdminServer</span><span class="tag">&lt;/</span><span class="tag-name">name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">listen-address</span><span class="tag">&gt;</span><span class="tag">&lt;/</span><span class="tag-name">listen-address</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">server</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">embedded-ldap</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">name</span><span class="tag">&gt;</span><span>base_domain</span><span class="tag">&lt;/</span><span class="tag-name">name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">credential-encrypted</span><span class="tag">&gt;</span><span>{AES}21z8vCiCbuaYqsSj5t5+y6qvEY8dE3NdNr0zDG+K3EdwWEubzk9Vmx79Di43oxqX</span><span class="tag">&lt;/</span><span class="tag-name">credential-encrypted</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">embedded-ldap</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">configuration-version</span><span class="tag">&gt;</span><span>12.1.3.0.0</span><span class="tag">&lt;/</span><span class="tag-name">configuration-version</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">admin-server-name</span><span class="tag">&gt;</span><span>AdminServer</span><span class="tag">&lt;/</span><span class="tag-name">admin-server-name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span><span class="tag">&lt;/</span><span class="tag-name">domain</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="html" style="display: none;">&lt;?xml version='1.0' encoding='UTF-8'?&gt;
+&lt;domain xmlns="http://xmlns.oracle.com/weblogic/domain" xmlns:sec="http://xmlns.oracle.com/weblogic/security" xmlns:wls="http://xmlns.oracle.com/weblogic/security/wls" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.oracle.com/weblogic/security/xacml http://xmlns.oracle.com/weblogic/security/xacml/1.0/xacml.xsd http://xmlns.oracle.com/weblogic/security/providers/passwordvalidator http://xmlns.oracle.com/weblogic/security/providers/passwordvalidator/1.0/passwordvalidator.xsd http://xmlns.oracle.com/weblogic/domain http://xmlns.oracle.com/weblogic/1.0/domain.xsd http://xmlns.oracle.com/weblogic/security http://xmlns.oracle.com/weblogic/1.0/security.xsd http://xmlns.oracle.com/weblogic/security/wls http://xmlns.oracle.com/weblogic/security/wls/1.0/wls.xsd"&gt;
+  &lt;name&gt;base_domain&lt;/name&gt;
+  &lt;domain-version&gt;12.1.3.0.0&lt;/domain-version&gt;
+  &lt;security-configuration&gt;
+    &lt;name&gt;base_domain&lt;/name&gt;
+    &lt;realm&gt;
+      &lt;sec:authentication-provider xsi:type="wls:default-authenticatorType"&gt;
+        &lt;sec:name&gt;DefaultAuthenticator&lt;/sec:name&gt;
+      &lt;/sec:authentication-provider&gt;
+      &lt;sec:password-validator xmlns:pas="http://xmlns.oracle.com/weblogic/security/providers/passwordvalidator" xsi:type="pas:system-password-validatorType"&gt;
+        &lt;sec:name&gt;SystemPasswordValidator&lt;/sec:name&gt;
+        &lt;pas:min-password-length&gt;8&lt;/pas:min-password-length&gt;
+        &lt;pas:min-numeric-or-special-characters&gt;1&lt;/pas:min-numeric-or-special-characters&gt;
+      &lt;/sec:password-validator&gt;
+    &lt;/realm&gt;
+    &lt;default-realm&gt;myrealm&lt;/default-realm&gt;
+    &lt;credential-encrypted&gt;{AES}xLPXh4gcT6JErTB+toxRZ1pQpAS+MGMuqnnXzu/OsxWMQTB8152ggdbUlhkSXUGC9f959oL7tIzyZiu9XdeajlkK9vAu9cQlCKLLUaUMyl5Ty4C0uuJA99b14eR7oIu4&lt;/credential-encrypted&gt;
+    &lt;node-manager-username&gt;weblogic&lt;/node-manager-username&gt;
+    &lt;node-manager-password-encrypted&gt;{AES}n3LLdgmAsocPRoYUrFfR2waWOlEz6KDFsp7+gByNeo8=&lt;/node-manager-password-encrypted&gt;
+  &lt;/security-configuration&gt;
+  &lt;server&gt;
+    &lt;name&gt;AdminServer&lt;/name&gt;
+    &lt;listen-address&gt;&lt;/listen-address&gt;
+  &lt;/server&gt;
+  &lt;embedded-ldap&gt;
+    &lt;name&gt;base_domain&lt;/name&gt;
+    &lt;credential-encrypted&gt;{AES}21z8vCiCbuaYqsSj5t5+y6qvEY8dE3NdNr0zDG+K3EdwWEubzk9Vmx79Di43oxqX&lt;/credential-encrypted&gt;
+  &lt;/embedded-ldap&gt;
+  &lt;configuration-version&gt;12.1.3.0.0&lt;/configuration-version&gt;
+  &lt;admin-server-name&gt;AdminServer&lt;/admin-server-name&gt;
+&lt;/domain&gt;</pre><br>
+<span style="font-size:18px">我们的项目部署信息添加在configuration-version 和 admin-server-name 之间</span>
+<p></p>
+<p></p>
+<div class="dp-highlighter bg_html"><div class="bar"><div class="tools"><b>[html]</b> <a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 381px; top: 9665px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_3" src="http://static.blog.csdn.net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_3" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=3&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1" class="dp-xml"><li class="alt"><span><span class="tag">&lt;</span><span class="tag-name">configuration-version</span><span class="tag">&gt;</span><span>12.1.3.0.0</span><span class="tag">&lt;/</span><span class="tag-name">configuration-version</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">app-deployment</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">name</span><span class="tag">&gt;</span><span>servletDemo</span><span class="tag">&lt;/</span><span class="tag-name">name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">target</span><span class="tag">&gt;</span><span>AdminServer</span><span class="tag">&lt;/</span><span class="tag-name">target</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">module-type</span><span class="tag">&gt;</span><span>war</span><span class="tag">&lt;/</span><span class="tag-name">module-type</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">source-path</span><span class="tag">&gt;</span><span>C:\Users\ZhangQi\Desktop\servletDemo</span><span class="tag">&lt;/</span><span class="tag-name">source-path</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">security-dd-model</span><span class="tag">&gt;</span><span>DDOnly</span><span class="tag">&lt;/</span><span class="tag-name">security-dd-model</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">app-deployment</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">admin-server-name</span><span class="tag">&gt;</span><span>AdminServer</span><span class="tag">&lt;/</span><span class="tag-name">admin-server-name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="html" style="display: none;">&lt;configuration-version&gt;12.1.3.0.0&lt;/configuration-version&gt;
+  &lt;app-deployment&gt;  
+	&lt;name&gt;servletDemo&lt;/name&gt;  
+	&lt;target&gt;AdminServer&lt;/target&gt;  
+	&lt;module-type&gt;war&lt;/module-type&gt;  
+	&lt;source-path&gt;C:\Users\ZhangQi\Desktop\servletDemo&lt;/source-path&gt;  
+	&lt;security-dd-model&gt;DDOnly&lt;/security-dd-model&gt;  
+  &lt;/app-deployment&gt;
+  &lt;admin-server-name&gt;AdminServer&lt;/admin-server-name&gt;</pre>
+<p><br>
+</p>
+<p><span style="font-size:18px">刚开始进行config.xml 配置文件部署的时候，出现了404，修改了下配置就可以了</span></p>
+
+<p><span style="font-size:18px">将 <span style="background-color:rgb(0,153,0)">&lt;module-type&gt;war&lt;/module-type&gt;</span> 里面的<span style="color:#FF0000"><em><strong>war
+</strong></em></span>修改为 <span style="color:#FF0000"><em><strong>dir </strong></em></span>即可</span></p>
+<p></p>
+<div class="dp-highlighter bg_html"><div class="bar"><div class="tools"><b>[html]</b> <a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 381px; top: 10000px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_4" src="http://static.blog.csdn.net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_4" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=4&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog.csdn.net/magi1201/article/details/46280507#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1" class="dp-xml"><li class="alt"><span><span class="tag">&lt;</span><span class="tag-name">app-deployment</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">name</span><span class="tag">&gt;</span><span>servletDemo</span><span class="tag">&lt;/</span><span class="tag-name">name</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">target</span><span class="tag">&gt;</span><span>AdminServer</span><span class="tag">&lt;/</span><span class="tag-name">target</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">module-type</span><span class="tag">&gt;</span><span>dir</span><span class="tag">&lt;/</span><span class="tag-name">module-type</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">source-path</span><span class="tag">&gt;</span><span>C:\Users\ZhangQi\Desktop\servletDemo</span><span class="tag">&lt;/</span><span class="tag-name">source-path</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">security-dd-model</span><span class="tag">&gt;</span><span>DDOnly</span><span class="tag">&lt;/</span><span class="tag-name">security-dd-model</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">staging-mode</span><span class="tag">&gt;</span><span>nostage</span><span class="tag">&lt;/</span><span class="tag-name">staging-mode</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">app-deployment</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="html" style="display: none;">&lt;app-deployment&gt;  
+	&lt;name&gt;servletDemo&lt;/name&gt;  
+	&lt;target&gt;AdminServer&lt;/target&gt;  
+	&lt;module-type&gt;dir&lt;/module-type&gt;  
+	&lt;source-path&gt;C:\Users\ZhangQi\Desktop\servletDemo&lt;/source-path&gt;
+	&lt;security-dd-model&gt;DDOnly&lt;/security-dd-model&gt;
+	&lt;staging-mode&gt;nostage&lt;/staging-mode&gt;
+  &lt;/app-deployment&gt;</pre><br>
+<br>
+<span style="font-size:18px">然后启动weblogic服务即可。</span>
+<hr>
+
+<h1><span style="font-family:SimSun; font-size:18px; color:#FF9900">控制台部署</span></h1>
+<p><br>
+</p>
+<p><span style="font-family:SimSun; font-size:18px">&nbsp;&nbsp;&nbsp; 这个一般的正式生产环境或测试环境可以采用这种方式。这时需要将weblogic的运行模式修改为生产模式，将部署包放到统一的地方进行管理，安装，更新，删除部署直接在控制台进行，方便监测。</span></p>
+<p><br>
+</p>
+<h1><span style="font-family:SimSun; font-size:18px; color:#FF9900">autodeploy</span></h1>
+<p><br>
+</p>
+<p><span style="font-family:SimSun; font-size:18px">&nbsp;&nbsp;&nbsp; 这个开发时用的多一点，方便管理。开发时候，直接将项目拷贝到autodeploy下面，然后启动weblogic服务，比较方便。考虑到weblogic服务不会自动解压war包（这点不如tomcat好），所以项目中通过一些绝对路径获取文件可能不能很好的取到，这时可以将war包解压为文件夹的形式，方便文件的读取。在开发时，可以通过ant 或 其它工具直接将修改的文件拷贝到autodeploy目录下面，比较方便。</span></p>
+<p><br>
+</p>
+<h1><span style="font-family:SimSun; font-size:18px; color:#FF9900">config.xml配置部署</span></h1>
+<p><br>
+</p>
+<p><span style="font-family:SimSun; font-size:18px">&nbsp;&nbsp;&nbsp; config.xml配置部署和autodeploy类&#20284;，不同的是autodeploy自动部署必须将项目的部署包放到autodeploy目录下面，但是config.xml配置部署的部署包可以放到任何地方。这种方式也是用在开发环境中，个人不推荐这种方式，因为每次有新项目部署的时候，都得去domain域里面找config.xml配置，然后修改，出错的风险太大，不如直接使用autodeploy的方式。</span></p>
+<p><br>
+</p>
+<p><span style="font-family:SimSun; font-size:18px">&nbsp;&nbsp;&nbsp; 经过上面的分析，<span style="color:#FF0000"><strong>生产</strong></span>中使用<span style="color:#FF0000"><em><strong>控制台部署</strong></em></span>，<span style="color:#FF0000"><strong>开发</strong></span>中使用<span style="color:#FF0000"><em><strong>autodeploy或config.xml配置</strong></em></span>部署。开发中如果使用eclipse进行开发的话，可以集成weblogic插件，直接在eclipse中进行weblogic的启动，停止
+   
+</div>
+  
+</div>
+                    </div>                   
+            </div>
+        </div>
+    <script type="text/javascript" src="./Weblogic_files/login.js"></script>
+    </div>
+</body></html>
