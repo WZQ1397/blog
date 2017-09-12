@@ -1,0 +1,62 @@
+    <link rel="Stylesheet" type="text/css" href="../Weblogic_files/style.css">
+
+    <link type="text/css" rel="stylesheet" href="../Weblogic_files/default.css">
+<p><span style="font-family:Microsoft YaHei; font-size:18px">下面简单介绍下WebLogic的安装步骤</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px"><br>
+</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">今天示例的WebLogic版本是12.1.3， 在Oracle官网下载其安装文件为fmw_12.1.3.0.0_wls.jar</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">之前版本的WebLogic安装文件都分Linux版和windows版的，现在可以统一通过jar文件的形式，来进行Linux和windows通用。</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">WebLogic12c版本的jdk要求为JDK7，所以，安装WebLogic12c前必须确保自己电脑安装了jdk7.</span></p>
+<p><br>
+</p>
+<p>使用<span style="color:#FF0000"> <span style="font-size:18px"><strong><span style="background:yellow">java –d64 –jar E:\soft\WebLogic\fmw_12.1.3.0.0_wls.jar</span></strong></span>&nbsp;</span> 启动程序安装<br>
+</p>
+<p><img src="../Weblogic_files/20140727140924125" alt="" height="56" width="704"></p>
+<p><br>
+</p>
+<p></p>
+<p align="left"><span style="font-family:Microsoft YaHei; font-size:18px">java命令中用-d32和-d64来表明程序运行在32位或者64位环境。如果JVM本身不支持该参数，会报告错误。</span></p>
+<p align="left"><span style="font-family:Microsoft YaHei; font-size:18px">当前仅有java hotspot server VM支持64位模式。</span></p>
+<p align="left"><span style="font-family:Microsoft YaHei; font-size:18px">选择 &quot;-server&quot;选项必须使用-d64；&quot;-client&quot;选项会忽略使用-d64；</span></p>
+<p align="left"><span style="font-family:Microsoft YaHei; font-size:18px">如果没有指定-d32或者-d64，则默认运行在32位模式。除非仅有64位系统。</span></p>
+<p align="left"><span style="font-family:Microsoft YaHei; font-size:18px">目前在windows平台下jdk1.5,JDK1.6不支持-d32,-d64的选项，jdk1.7支持-d32,-d64的选项。</span></p>
+<p align="left"><span style="font-family:Microsoft YaHei; font-size:18px">在linux平台下jdk1.5, 1.6, 1.7均支持-d32,-d64的选项。</span></p>
+<br>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">启动后，会首先检查系统是否服务要求</span><br>
+</p>
+<p><img src="../Weblogic_files/20140727141044559" alt="" height="200" width="600"></p>
+<p><br>
+</p>
+<p><img src="../Weblogic_files/20140727141020363" alt="" height="200" width="600"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">检查通过后，启动WebLogic安装图形界面</span><br>
+</p>
+<p><img src="../Weblogic_files/20140727140844953" alt="" height="472" width="602"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">直接点击下一步即可</span><br>
+</p>
+<p><img src="../Weblogic_files/20140727140903468" alt="" height="469" width="600"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">指定Oracle主目录，即WebLogic主目录，</span><span style="font-size:18px; color:#FF0000"><strong>注意，WebLogic安装目录不可包含空&#26684;和中文字符</strong></span><br>
+</p>
+<p><img src="../Weblogic_files/20140727141154650" alt="" height="469" width="600"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">安装类型，选择WebLogic server，无需安装中间件和示例</span><br>
+</p>
+<p><img src="../Weblogic_files/20140727141219422" alt="" height="470" width="602"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">继续先决检查，点击下一步即可</span><br>
+</p>
+<p><img src="../Weblogic_files/20140727141244913" alt="" height="467" width="600"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">对于更新的处理，我们选择不接受更新的提醒</span><br>
+</p>
+<p><img src="../Weblogic_files/20140727141310887" alt="" height="470" width="600"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">选择 不希望收到有关配置中严重安全问题的...</span><br>
+</p>
+<p><img src="../Weblogic_files/20140727141331073" alt="" height="461" width="595"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">安装概要，磁盘空间及安装日志记录等</span><br>
+</p>
+<p><img src="../Weblogic_files/20140727141404317" alt="" height="476" width="604"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">整体的安装过程</span><br>
+</p>
+<p><img src="../Weblogic_files/20140727141159031" alt="" height="471" width="603"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">此步骤需要耗时一段时间</span><br>
+</p>
+<p><img src="../Weblogic_files/20140727141444799" alt="" height="471" width="601"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">安装完成，此时不选择后续步骤的自动启动配置向导。</span><br>
+</p>

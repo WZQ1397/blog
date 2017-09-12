@@ -1,0 +1,50 @@
+    <link rel="Stylesheet" type="text/css" href="../Weblogic_files/style.css">
+
+    <link type="text/css" rel="stylesheet" href="../Weblogic_files/default.css">
+<p><span style="font-family:Microsoft YaHei; font-size:18px">这里讲讲为什么，通常一个WebLogic一般都不止一个domain域，所以，这里介绍更通用的域安装方法。</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px"><strong>Domain:</strong> 域是个逻辑概念，用来组织管理一系列的应用服务器实例，也就是下面要解释的server.<br>
+</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">域是WebLogic应用服务器中最大的概念，WebLogic应用服务器启动的时候就是以某个域来启动的，它有一个中心配置文件叫config.xml.</span><br>
+</p>
+<p><br>
+</p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">安装完WebLogic后，进入到WebLogic的主目录后，找到wlsservle目录</span></p>
+<p><img src="../Weblogic_files/20140727144349615" alt=""></p>
+<p><br>
+</p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">继续进入到common目录，进入bin目录，找到config.cmd 脚本</span></p>
+<p><img src="../Weblogic_files/20140727144428444" alt="" height="475" width="601"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">可以选择双击启动，或者进入DOS命令行，找到config命令所在目录</span></p>
+<p><img src="../Weblogic_files/20140727144935702" alt="" height="477" width="597"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">通过 config.cmd 回车，在命令行启动domain域安装</span></p>
+<p><img src="../Weblogic_files/20140727144836343" alt="" height="395" width="590"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">启动安装后，弹出domain域安装界面</span></p>
+<p><img src="../Weblogic_files/20140727145144979" alt="" height="437" width="588"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">修改域安装目录，安装名称，下一步安装</span></p>
+<p><img src="../Weblogic_files/20140727145350544" alt="" height="444" width="591"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">选择默认的创建所有模板</span></p>
+<p><img src="../Weblogic_files/20140727145454052" alt="" height="442" width="589"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">域管理员账号，下面有口令的密码要求，至少8位，包含一个数字或特殊字符。</span></p>
+<p><img src="../Weblogic_files/20140727145651239" alt="" height="447" width="596"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">设定口令后，点击下一步</span></p>
+<p><img src="../Weblogic_files/20140727145512890" alt="" height="451" width="599"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">模式中，选择开发模式，开发模式中，可以使用boot.properties记录用户名和密码，无需每次启动来输入用户名和密码</span></p>
+<p><img src="../Weblogic_files/20140727145730156" alt="" height="454" width="604"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">高级配置中选择管理服务器</span><br>
+</p>
+<p><img src="../Weblogic_files/20140727145926413" alt="" height="451" width="602"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">管理服务器这一步，可以选择该domain域的监听端口，默认选择7001</span></p>
+<p><img src="../Weblogic_files/20140727145851593" alt="" height="454" width="603"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">配置概要，默认即可，点击创建进行域的创建</span></p>
+<p><img src="../Weblogic_files/20140727150248683" alt="" height="452" width="604"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">配置进度，需要花费一段时间</span></p>
+<p><img src="../Weblogic_files/20140727150201484" alt="" height="456" width="604"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">配置完成，点击下一步</span><br>
+</p>
+<p><img src="../Weblogic_files/20140727150416562" alt="" height="456" width="603"></p>
+<p><span style="font-size:18px">点击完成，domain域创建完成。</span></p>
+<p><span style="font-size:18px"><br>
+</span></p>
+<p><span style="font-size:18px">上一讲和这一讲介绍了webLogic的安装和domain域安装，示例是在windows环境下安装的。</span></p>
+<p><span style="font-size:18px">不过 安装中尽量使用命令行的方式，此方式可以移植到Linux环境下，不过Linux服务器需要安装了图形界面服务。</span></p>
+<p><span style="font-size:18px">如果没有图形界面服务，就只能采用命令行方式进行安装。</span></p>

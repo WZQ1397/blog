@@ -1,0 +1,89 @@
+
+       
+    <title>Weblogic之weblogic数据源配置及jndi调用</title>
+    <link rel="Stylesheet" type="text/css" href="../Weblogic_files/style.css">
+
+    <link type="text/css" rel="stylesheet" href="../Weblogic_files/default.css">
+ 
+<body style="color: rgb(0, 0, 0); background-color: rgb(204, 232, 207);"><div id="MathJax_Message" style="display: none;">
+
+    <h1>
+        <span class="link_title"><a href="http://blog.csdn.net/magi1201/article/details/38270329">
+        Weblogic之weblogic数据源配置及jndi调用        
+           
+        </a>
+        </span>
+
+         
+    </h1>
+</div>
+
+
+<div id="article_content" class="article_content tracking-ad" data-mod="popu_307" data-dsm="post">
+
+<p><span style="font-family:Microsoft YaHei; font-size:18px">将数据源交给容器管理，使用jndi的方式管理，可以很方便的管理数据库连接。</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">将数据管理库交给容器，后面工程直接使用jndi的方式在容器中获取jndi地址。</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">如果变更数据库地址，直接修改数据库连接池的地址即可，而各工程无需再一个个的修改数据库连接地址，简化了数据库的管理。</span></p>
+<p><br>
+</p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">今天我们看看WebLogic中数据源的配置</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">启动WebLogic服务，进入WebLogic控制台</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">点击左侧的 <strong>服务</strong> -&gt;&nbsp;<strong> 数据源</strong></span><br>
+</p>
+<p><img src="../Weblogic_files/20140729233039614" alt="" height="236" width="602"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">新建 一般数据源 </span><br>
+</p>
+<p><img src="../Weblogic_files/20140729232838843" alt="" height="493" width="605"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">填写数据源名称和 jndi名称，选择数据库类型</span></p>
+<p><img src="../Weblogic_files/20140729232929187" alt="" height="227" width="601"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">选择数据库驱动</span></p>
+<p><img src="../Weblogic_files/20140729233216599" alt="" height="307" width="600"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">默认下一步即可</span></p>
+<p><img src="../Weblogic_files/20140729233234539" alt="" height="433" width="601"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">填写数据库名称，主机名，端口号，数据库用户名和口令</span></p>
+<p><img src="../Weblogic_files/20140729233320044" alt="" height="526" width="601"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">点击测试配置，待消息区显示连接测试成功时，点击完成</span></p>
+<p><img src="../Weblogic_files/20140729233146890" alt="" height="280" width="600"></p>
+<p><br>
+</p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">接下来我们在web工程中来调用一下WebLogic容器的jndi数据源。<br>
+</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px"><br>
+</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">工程中web.xml配置为</span></p>
+<p></p>
+<div class="dp-highlighter bg_java"><div class="bar"><div class="tools"><b>[java]</b> <a href="http://blog.csdn.net/magi1201/article/details/38270329#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog.csdn.net/magi1201/article/details/38270329#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 381px; top: 3340px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_1" src="http://static.blog.csdn.net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_1" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=1&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog.csdn.net/magi1201/article/details/38270329#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog.csdn.net/magi1201/article/details/38270329#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1" class="dp-j"><li class="alt"><span><span>&lt;resource-ref&gt;&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;DB&nbsp;Connection&lt;/description&gt;&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;res-ref-name&gt;jdbc/test&lt;/res-ref-name&gt;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;res-type&gt;javax.sql.DataSource&lt;/res-type&gt;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;res-auth&gt;Container&lt;/res-auth&gt;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&lt;/resource-ref&gt;&nbsp;&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="java" style="display: none;">&lt;resource-ref&gt;  
+     &lt;description&gt;DB Connection&lt;/description&gt;
+     &lt;res-ref-name&gt;jdbc/test&lt;/res-ref-name&gt;  
+     &lt;res-type&gt;javax.sql.DataSource&lt;/res-type&gt;  
+     &lt;res-auth&gt;Container&lt;/res-auth&gt;  
+  &lt;/resource-ref&gt; 
+
+
+</pre><br>
+<p></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">接下来看看工程代码中的调用</span></p>
+<p></p>
+<div class="dp-highlighter bg_java"><div class="bar"><div class="tools"><b>[java]</b> <a href="http://blog.csdn.net/magi1201/article/details/38270329#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog.csdn.net/magi1201/article/details/38270329#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 381px; top: 3569px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_2" src="http://static.blog.csdn.net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_2" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=2&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog.csdn.net/magi1201/article/details/38270329#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog.csdn.net/magi1201/article/details/38270329#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1" class="dp-j"><li class="alt"><span><span>Hashtable&lt;String,&nbsp;String&gt;&nbsp;env&nbsp;=&nbsp;</span><span class="keyword">new</span><span>&nbsp;Hashtable&lt;String,&nbsp;String&gt;();&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;env.put(Context.INITIAL_CONTEXT_FACTORY,&nbsp;<span class="string">"weblogic.jndi.WLInitialContextFactory"</span><span>);&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;env.put(Context.PROVIDER_URL,<span class="string">"t3://localhost:7001"</span><span>);&nbsp;&nbsp;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//&nbsp;初始化查找命名空间</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>Context&nbsp;ctx&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;InitialContext(env);&nbsp;&nbsp;</span></span></li><li class="alt"><span>DataSource&nbsp;ds&nbsp;=&nbsp;(DataSource)&nbsp;ctx.lookup(<span class="string">"java:comp/env/jdbc/test"</span><span>);&nbsp;&nbsp;</span></span></li><li class=""><span><span class="comment">//&nbsp;获取数据库连接</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>Connection&nbsp;conn&nbsp;=&nbsp;ds.getConnection();&nbsp;&nbsp;</span></li></ol></div>
+<p></p>
+<p><br>
+</p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">这时，会有</span></p>
+<div class="dp-highlighter bg_java"><div class="bar"><div class="tools"><b>[java]</b> <a href="http://blog.csdn.net/magi1201/article/details/38270329#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog.csdn.net/magi1201/article/details/38270329#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 381px; top: 3852px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_3" src="http://static.blog.csdn.net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_3" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=3&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog.csdn.net/magi1201/article/details/38270329#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog.csdn.net/magi1201/article/details/38270329#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1" class="dp-j"><li class="alt"><span><span>javax.naming.LinkException:&nbsp;&nbsp;[Root&nbsp;exception&nbsp;is&nbsp;javax.naming.NameNotFoundException:&nbsp;&nbsp;&nbsp;</span></span></li><li class=""><span>While&nbsp;trying&nbsp;to&nbsp;lookup&nbsp;<span class="string">'jdbc.test'</span><span>&nbsp;didn</span><span class="string">'t&nbsp;find&nbsp;subcontext&nbsp;'</span><span>jdbc</span><span class="string">'.&nbsp;Resolved&nbsp;'</span><span class="string">';&nbsp;remaining&nbsp;name&nbsp;'</span><span>jdbc/test'];&nbsp;&nbsp;&nbsp;</span></span></li><li class="alt"><span>Link&nbsp;Remaining&nbsp;Name:&nbsp;<span class="string">'jdbc/test'</span><span>&nbsp;at&nbsp;weblogic.jndi.internal.WLNamingManager.getObjectInstance(WLNamingManager.java:</span><span class="number">100</span><span>)&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="java" style="display: none;">javax.naming.LinkException:  [Root exception is javax.naming.NameNotFoundException: 
+While trying to lookup 'jdbc.test' didn't find subcontext 'jdbc'. Resolved ''; remaining name 'jdbc/test']; 
+Link Remaining Name: 'jdbc/test' at weblogic.jndi.internal.WLNamingManager.getObjectInstance(WLNamingManager.java:100)</pre>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">异常产生。</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">仔细检查会发现，我们的数据源定义好了，但是没有指定它的服务目标</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">现在我们将数据源绑定到它的目标server上面去</span></p>
+<p><img src="../Weblogic_files/20140729234551342" alt="" height="160" width="604"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">点击数据源jdbcTest，进入到数据源详细信息页面</span></p>
+<p><img src="../Weblogic_files/20140729234406921" alt="" height="472" width="609"></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">点击上面的目标Tab页签，展示目标页内容</span></p>
+<p><img src="../Weblogic_files/20140729234717001" alt=""><br>
+</p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">勾选AdminServer前面的勾，点击保存，设置jdbcTest数据源为AdminServer服务。</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">待消息区出现，已激活所有更改，不需要重新启动，设置更新成功。 数据源设置成功。</span></p>
+<p><span style="font-family:Microsoft YaHei; font-size:18px">重新在工程中获取数据库连接池，可成功获取。</span></p>
+
+</div>
+
