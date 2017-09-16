@@ -1,0 +1,546 @@
+    <link rel="Stylesheet" type="text/css" href="../Weblogic_files/style.css">
+
+    <link type="text/css" rel="stylesheet" href="../Weblogic_files/default.css">
+
+<span style="font-family:&#39;Times New Roman&#39;; font-size:14px; line-height:25.2000007629395px; word-wrap:break-word">&nbsp; &nbsp; &nbsp;共有两种安装方式，在线的yum安装和下载源码包编译安装，这两种安装方式都可以，但是在线安装的版本可能比较老，如果想使用新版本，建议使用离线安装，特别是</span><span style="font-family:&#39;Times New Roman&#39;; font-size:14px; line-height:25.2000007629395px; word-wrap:break-word">gweb</span><span style="font-family:&#39;Times New Roman&#39;; font-size:14px; line-height:25.2000007629395px; word-wrap:break-word">的显示，老版本比较丑陋。</span></p>
+
+<span style="word-wrap:break-word"><strong><span style="font-size:24px"><span style="font-family:Times New Roman">1 安装前环境准备</span></span></strong></span></h1>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;</span></span></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t1" target="_blank"></a>
+<span style="font-family:Times New Roman; font-size:14px"><strong><span style="word-wrap:break-word">&nbsp; 1&nbsp;</span><span style="word-wrap:break-word">防火墙的状态</span></strong><span style="line-height:25.2000007629395px">&nbsp;</span></span></h2>
+<div><div class="dp-highlighter bg_plain"><div class="bar"><div class="tools"><b>[plain]</b> <a href="http://blog..net/tryhl/article/details/44495191#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog..net/tryhl/article/details/44495191#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 393px; top: 661px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_1" src="http://static.blog..net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_1" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=1&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog..net/tryhl/article/details/44495191#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog..net/tryhl/article/details/44495191#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1"><li class="alt"><span><span>#关闭防火墙&nbsp;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;service&nbsp;iptables&nbsp;stop&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;chkconfig&nbsp;iptables&nbsp;off&nbsp;&nbsp;</span></li><li class=""><span>#查看状态&nbsp;&nbsp;&nbsp;</span></li><li class="alt"><span>service&nbsp;iptables&nbsp;status&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="plain" style="display: none;">  #关闭防火墙 
+   service iptables stop
+   chkconfig iptables off
+  #查看状态 
+  service iptables status</pre></div>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t2" target="_blank"></a>
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp;2&nbsp;</span><span style="word-wrap:break-word">关闭selinux</span></span></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;sestatus&nbsp;&nbsp;查看运行状态</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp;如果是运行状态，编辑&nbsp;</span><span style="word-wrap:break-word">&nbsp;</span><span style="word-wrap:break-word">cat&nbsp;/etc/selinux/config&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;修改该属性&nbsp;&nbsp;SELINUX=disabled然后重启即可。</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;上面是永久生效的方法，还有一种是立即生效&nbsp;&nbsp;运行getenforce&nbsp;0(我没有运行成功)</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><strong><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;3 相关配置文件说明</span></strong></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp;</span><span style="word-wrap:break-word">ganglia&nbsp;</span><span style="word-wrap:break-word">配置文件目录：</span><span style="word-wrap:break-word"><span style="color:#ff0000">/etc/ganglia</span></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp;rrd&nbsp;</span><span style="word-wrap:break-word">数据库存放目录：</span><span style="word-wrap:break-word"><span style="color:#ff0000">/var/lib/ganglia/rrds</span></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp;httpd&nbsp;</span><span style="word-wrap:break-word">主站点目录：</span><span style="word-wrap:break-word"><span style="color:#ff0000">/var/www/html</span></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp;ganglia-web&nbsp;</span><span style="word-wrap:break-word">安装目录：</span><span style="word-wrap:break-word"><span style="color:#ff0000">/usr/share/ganglia</span></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp;ganglia-web&nbsp;</span><span style="word-wrap:break-word">配置目录：</span><span style="word-wrap:break-word"><span style="color:rgb(255,0,0)">/etc/httpd/conf.d/ganglia.conf</span></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-size:14px"><span style="word-wrap:break-word"><span style="font-family:Times New Roman"><br>
+</span></span></span></p>
+<h1 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t3" target="_blank"></a>
+<span style="word-wrap:break-word"><span style="font-size:24px"><span style="font-family:Times New Roman">2 yum或者apt-get安装</span></span></span></h1>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-size:14px"><span style="font-family:Times New Roman">&nbsp; &nbsp;&nbsp;</span></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman"><span style="font-size:14px">&nbsp; &nbsp;</span><span style="font-size:14px"> &nbsp;&nbsp;由于我的机器是Centos6.5的,所以我这里只介绍yum安装方式，apt-get安装和这差不多，只是命令不一样而已。</span></span></span></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t4" target="_blank"></a>
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px"><strong>&nbsp; &nbsp; &nbsp;1 检查ganglia相关包是否存在</strong></span></span></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; &nbsp; &nbsp;rpm&nbsp;-qa&nbsp;|grep&nbsp;ganglia</span></span></p>
+<img src="./ganglia_files/181402c51lxsz61wvdyovv.png" alt="">
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; &nbsp; 我这里已经有了，是3.1.7版本的</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; &nbsp;如果没有，请运行下面代码更新资源</span></span></p>
+Fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</span></span></p>
+<img src="./ganglia_files/181426kynlyyyzz07177kl.png" alt=""></a></span></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t5" target="_blank"></a>
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp;<strong> &nbsp;2&nbsp;</strong></span><span style="word-wrap:break-word"><strong>安装gmond（每个节点都要安装）</strong></span></span></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; &nbsp;在每个需要监控的节点，安装gmond</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; &nbsp;yum install ganglia-gmond</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; &nbsp;配置<span style="color:#ff0000">/etc/ganglia/gmond.conf</span>文件</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; &nbsp;vim /etc/ganglia/gmond.conf</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; &nbsp;<span style="color:#ff0000"><strong>Global区域的修改如下图</strong></span>，只需要修改user以及send_metadata_interval</span></span></p>
+<img src="./ganglia_files/181544qycmhjjfnmhi1hsw.png" alt="">
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;&nbsp;<strong><span style="color:#ff0000">Cluster</span><span style="color:#ff0000">区域修改如下图</span></strong>，修改name名称，这个是集群名称，用于后面gmetad的配置</span></span></p>
+<img src="./ganglia_files/181555jszl7dmzh02sz7jp.png" alt="">
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;
+<strong><span style="color:#ff0000">Udp_send_channel</span><span style="color:#ff0000">区域修改如下</span></strong>，注释掉mcasy_jion(用于组播)，我们这里采用单播，10.3.1.35替换成你机器的名称</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+
+<img src="./ganglia_files/181556bmnmqc2gm4z3j0qq.png" alt=""></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;<strong><span style="color:#ff0000">Udp_recv_channe修改如下，</span></strong>注释掉mcast_join以及bind即可</span></span></p>
+<img src="./ganglia_files/181556uz105i7fqoyj3u4o.png" alt="">
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;<strong><span style="color:#ff0000">启动gmond</span></strong></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp; &nbsp;</span><span style="word-wrap:break-word">service&nbsp;gmond&nbsp;start</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;<strong><span style="color:#ff0000">注：</span></strong></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;可以在启动之前，运行<span style="color:#ff0000">telnet&nbsp;localhost&nbsp;8649</span></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;如果出现如下图，xml内容则安装正确，接着往下安装</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp;也可以将</span><span style="word-wrap:break-word">gmond.conf</span><span style="word-wrap:break-word">中的</span><span style="word-wrap:break-word">debug</span><span style="word-wrap:break-word">从</span><span style="word-wrap:break-word">0</span><span style="word-wrap:break-word">改为</span><span style="word-wrap:break-word">100</span><span style="word-wrap:break-word">，看更多的日志，然后进行排查。</span></span></p>
+<img src="./ganglia_files/181556nz88wpwc760i8bj9.png" alt="">
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<strong><span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px"><br>
+</span></span></strong></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t6" target="_blank"></a>
+<strong><span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; 3&nbsp;安装gmetad（只有主节点需要）</span></span></strong></h2>
+<p><span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px"><strong>&nbsp;</strong>&nbsp; &nbsp;安装</span></span><span style="font-family:&#39;Times New Roman&#39;; font-size:14px; line-height:25.2000007629395px">&nbsp;yum&nbsp;install&nbsp;ganglia-gmetad</span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; 配置&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; vim /etc/ganglia/gmetad.conf</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;找到data_source，第一个参数hadoop-cluster和gmond.conf的cluster的name必须一样，第二个参数和 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;upd_send_channel中的host &nbsp; &nbsp; 一样，当然可以有很多个，我这里配置了一个，结合你配置的环境。</span></span></p>
+<img src="./ganglia_files/181847mls22dpwplspch2p.png" alt="">
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp; 启动</span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; service&nbsp;gmetad&nbsp;start</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; 测试&nbsp;telnet&nbsp;localhost&nbsp;8651&nbsp;出现和上面测试gmond的情况一样，那么安装成功。</span></span></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t7" target="_blank"></a>
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;4&nbsp;安装gweb（只需要主节点）</span></span></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><strong>&nbsp; &nbsp;</strong>安装</span><span style="font-family:&#39;Times New Roman&#39;; font-size:14px; line-height:25.2000007629395px">yum&nbsp;install&nbsp;ganglia-web</span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp;修改</span><span style="word-wrap:break-word">ganglia-web&nbsp;</span><span style="word-wrap:break-word">的访问权限（只是掉其他，加入Allow from all）</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp;vim /etc/httpd/conf.d/ganglia.conf</span><span style="line-height:25.2000007629395px">&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="line-height:25.2000007629395px"></span></span></p>
+<div class="dp-highlighter bg_plain"><div class="bar"><div class="tools"><b>[plain]</b> <a href="http://blog..net/tryhl/article/details/44495191#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog..net/tryhl/article/details/44495191#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 393px; top: 3539px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_2" src="http://static.blog..net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_2" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=2&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog..net/tryhl/article/details/44495191#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog..net/tryhl/article/details/44495191#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1"><li class="alt"><span><span>&nbsp;Alias&nbsp;/ganglia&nbsp;/usr/share/ganglia&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&lt;Location&nbsp;/ganglia&gt;&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;Order&nbsp;deny,allow&nbsp;&nbsp;</span></li><li class=""><span>#&nbsp;Deny&nbsp;from&nbsp;all&nbsp;&nbsp;</span></li><li class="alt"><span>#&nbsp;Allow&nbsp;from&nbsp;127.0.0.1&nbsp;&nbsp;</span></li><li class=""><span>#&nbsp;Allow&nbsp;from&nbsp;::1&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;Allow&nbsp;from&nbsp;all&nbsp;&nbsp;</span></li><li class=""><span>#&nbsp;Allow&nbsp;from&nbsp;.example.com&nbsp;&nbsp;</span></li><li class="alt"><span>&lt;/Location&gt;&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="plain" style="display: none;">    Alias /ganglia /usr/share/ganglia
+    &lt;Location /ganglia&gt;
+    Order deny,allow
+   # Deny from all
+   # Allow from 127.0.0.1
+   # Allow from ::1
+    Allow from all
+   # Allow from .example.com
+   &lt;/Location&gt;</pre>
+<p></p>
+<p></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t8" target="_blank"></a>
+<strong><span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; 5&nbsp;安装apache服务器以及php（下面只需主节点安装）</span></span></strong></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; 1)安装 apache以及php</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; yum&nbsp;install&nbsp;httpd&nbsp;php</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; 2)安装ganglia-web</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; yum install ganglia-web</span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; 3)<span style="line-height:25.2000007629395px; word-wrap:break-word">将</span><span style="line-height:25.2000007629395px; word-wrap:break-word">ganglia-web&nbsp;</span><span style="line-height:25.2000007629395px; word-wrap:break-word">安装目录链接到</span><span style="line-height:25.2000007629395px; word-wrap:break-word">httpd&nbsp;</span><span style="line-height:25.2000007629395px; word-wrap:break-word">主站点目录（apache服务器访问的根目录）</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; ln&nbsp;-s&nbsp;/usr/share/ganglia&nbsp;/var/www/html</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp; 4)修改</span><span style="word-wrap:break-word">httpd&nbsp;</span><span style="word-wrap:break-word">主站点目录下</span><span style="word-wrap:break-word">ganglia&nbsp;</span><span style="word-wrap:break-word">站点目录的访问权限
+ &nbsp;&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp; &nbsp; 将</span><span style="word-wrap:break-word">ganglia&nbsp;</span><span style="word-wrap:break-word">站点目录访问权限改为</span><span style="word-wrap:break-word">apache:apache</span><span style="word-wrap:break-word">，否则会报错</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; &nbsp; $&nbsp;chown&nbsp;-R&nbsp;apache:apache&nbsp;/var/www/html/ganglia</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; &nbsp; $&nbsp;chmod&nbsp;-R&nbsp;755&nbsp;/var/www/html/ganglia</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp; 5)修改</span><span style="word-wrap:break-word">rrd&nbsp;</span><span style="word-wrap:break-word">数据库存放目录访问权限</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp; &nbsp; 将</span><span style="word-wrap:break-word">rrd&nbsp;</span><span style="word-wrap:break-word">数据库存放目录访问权限改为</span><span style="word-wrap:break-word">nobody:nobod</span><span style="word-wrap:break-word">y，否则会报错</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; &nbsp; chown&nbsp;-R&nbsp;nobody:nobody&nbsp;/var/lib/ganglia/rrds</span></span></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t9" target="_blank"></a>
+<strong><span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;6 启动访问</span></span></strong></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;依次启动gmond,gmetad,httpd</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp;service gmond start</span><span style="line-height:25.2000007629395px">&nbsp;&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;访问hostname/ganglia即可(这里的hostname是安装gweb以及gmetad的主机名或者ip)</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;</span></span></p>
+<h1 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t10" target="_blank"></a>
+<span style="word-wrap:break-word"><span style="font-size:24px"><span style="font-family:Times New Roman">3 源码包安装</span></span></span></h1>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-size:14px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><strong><span style="font-family:Times New Roman">&nbsp;</span></strong></span></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t11" target="_blank"></a>
+<span style="line-height:25.2000007629395px"><span style="font-family:Times New Roman"><span style="font-size:14px">&nbsp;</span><span style="font-size:14px">1 安装前准备</span></span></span></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px"></span></span></p>
+<div class="dp-highlighter bg_plain"><div class="bar"><div class="tools"><b>[plain]</b> <a href="http://blog..net/tryhl/article/details/44495191#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog..net/tryhl/article/details/44495191#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 393px; top: 4320px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_3" src="http://static.blog..net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_3" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=3&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog..net/tryhl/article/details/44495191#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog..net/tryhl/article/details/44495191#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1"><li class="alt"><span><span>yum&nbsp;-y&nbsp;install&nbsp;apr-devel&nbsp;apr-util&nbsp;check-devel&nbsp;cairo-devel&nbsp;pango-devel&nbsp;libxml2-devel&nbsp;rpmbuild&nbsp;glib2-devel&nbsp;dbus-devel&nbsp;freetype-devel&nbsp;fontconfig-devel&nbsp;gcc-c++&nbsp;expat-devel&nbsp;python-devel&nbsp;libXrender-devel&nbsp;&nbsp;libart_lgpl&nbsp;&nbsp;libpng&nbsp;&nbsp;</span></span></li></ol></div><pre name="code" class="plain" style="display: none;">  yum -y install apr-devel apr-util check-devel cairo-devel pango-devel libxml2-devel rpmbuild glib2-devel dbus-devel freetype-devel fontconfig-devel gcc-c++ expat-devel python-devel libXrender-devel  libart_lgpl  libpng</pre><br>
+<p></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t12" target="_blank"></a>
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;2 安装expat</span></span></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; 下载expat-2.0.1.tar.gz</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px"></span></span></p>
+<div class="dp-highlighter bg_plain"><div class="bar"><div class="tools"><b>[plain]</b> <a href="http://blog..net/tryhl/article/details/44495191#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog..net/tryhl/article/details/44495191#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 393px; top: 4533px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_4" src="http://static.blog..net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_4" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=4&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog..net/tryhl/article/details/44495191#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog..net/tryhl/article/details/44495191#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1"><li class="alt"><span><span>tar&nbsp;-xzvf&nbsp;expat-2.0.1.tar.gz&nbsp;&nbsp;</span></span></li><li class=""><span>./configure&nbsp;--prefix=/usr/local/expat&nbsp;&nbsp;</span></li><li class="alt"><span>make&nbsp;&nbsp;</span></li><li class=""><span>make&nbsp;install&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="plain" style="display: none;">    tar -xzvf expat-2.0.1.tar.gz
+    ./configure --prefix=/usr/local/expat
+    make
+    make install</pre>
+<p></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; 对于64位操作系统，需要手动的拷贝下动态链接库到lib64下&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px"></span></span></p>
+<div class="dp-highlighter bg_plain"><div class="bar"><div class="tools"><b>[plain]</b> <a href="http://blog..net/tryhl/article/details/44495191#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog..net/tryhl/article/details/44495191#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 393px; top: 4699px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_5" src="http://static.blog..net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_5" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=5&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog..net/tryhl/article/details/44495191#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog..net/tryhl/article/details/44495191#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1"><li class="alt"><span><span>mkdir&nbsp;/usr/local/expat/lib64&nbsp;&nbsp;&nbsp;</span></span></li><li class=""><span>cp&nbsp;-a&nbsp;/usr/local/expat/lib/*&nbsp;/usr/local/expat/lib64/&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="plain" style="display: none;">    mkdir /usr/local/expat/lib64 
+    cp -a /usr/local/expat/lib/* /usr/local/expat/lib64/</pre><br>
+<p></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t13" target="_blank"></a>
+<span style="font-family:Times New Roman; font-size:14px"><strong><span style="word-wrap:break-word">&nbsp;3 安装</span><span style="word-wrap:break-word">apr</span><span style="word-wrap:break-word">以及</span><span style="word-wrap:break-word">apr-util&nbsp;</span></strong><span style="line-height:25.2000007629395px">&nbsp;</span></span></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px"></span></span></p>
+<div class="dp-highlighter bg_plain"><div class="bar"><div class="tools"><b>[plain]</b> <a href="http://blog..net/tryhl/article/details/44495191#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog..net/tryhl/article/details/44495191#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 393px; top: 4869px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_6" src="http://static.blog..net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_6" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=6&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog..net/tryhl/article/details/44495191#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog..net/tryhl/article/details/44495191#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1"><li class="alt"><span><span>tar&nbsp;-xvzf&nbsp;apr-1.3.12.tar.gz&nbsp;&nbsp;</span></span></li><li class=""><span>./configure&nbsp;--prefix=/usr/local/apr&nbsp;&nbsp;&nbsp;</span></li><li class="alt"><span>make&nbsp;&nbsp;&nbsp;</span></li><li class=""><span>make&nbsp;install&nbsp;&nbsp;&nbsp;</span></li><li class="alt"><span>tar&nbsp;xvjf&nbsp;apr-util-1.3.12.tar.bz2&nbsp;&nbsp;</span></li><li class=""><span>./configure&nbsp;&nbsp;--with-apr=/usr/local/apr&nbsp;--with-expat=/usr/local/expat&nbsp;&nbsp;</span></li><li class="alt"><span>make&nbsp;&nbsp;&nbsp;</span></li><li class=""><span>make&nbsp;install&nbsp;&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="plain" style="display: none;">    tar -xvzf apr-1.3.12.tar.gz
+    ./configure --prefix=/usr/local/apr 
+    make 
+    make install 
+    tar xvjf apr-util-1.3.12.tar.bz2
+    ./configure  --with-apr=/usr/local/apr --with-expat=/usr/local/expat
+    make 
+    make install </pre>
+<p></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp; 同样64位机器需要拷贝动态链接库</span><span style="line-height:25.2000007629395px">&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word"></span></span></p>
+<div class="dp-highlighter bg_plain"><div class="bar"><div class="tools"><b>[plain]</b> <a href="http://blog..net/tryhl/article/details/44495191#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog..net/tryhl/article/details/44495191#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 393px; top: 5107px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_7" src="http://static.blog..net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_7" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=7&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog..net/tryhl/article/details/44495191#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog..net/tryhl/article/details/44495191#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1"><li class="alt"><span><span>cp&nbsp;&nbsp;&nbsp;/usr/local/apr/include/apr-1/*&nbsp;/usr/local/apr/include/&nbsp;&nbsp;&nbsp;</span></span></li><li class=""><span>mkdir&nbsp;-p&nbsp;/usr/local/apr/lib64&nbsp;&nbsp;&nbsp;</span></li><li class="alt"><span>cp&nbsp;-af&nbsp;&nbsp;/usr/local/apr/lib/*&nbsp;/usr/local/apr/lib64&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="plain" style="display: none;">    cp   /usr/local/apr/include/apr-1/* /usr/local/apr/include/ 
+    mkdir -p /usr/local/apr/lib64 
+    cp -af  /usr/local/apr/lib/* /usr/local/apr/lib64</pre><br>
+<p></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t14" target="_blank"></a>
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp;4 安装confuse</span><span style="word-wrap:break-word">&nbsp;</span></span></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word"></span></span></p>
+<div class="dp-highlighter bg_plain"><div class="bar"><div class="tools"><b>[plain]</b> <a href="http://blog..net/tryhl/article/details/44495191#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog..net/tryhl/article/details/44495191#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 393px; top: 5295px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_8" src="http://static.blog..net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_8" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=8&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog..net/tryhl/article/details/44495191#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog..net/tryhl/article/details/44495191#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1"><li class="alt"><span><span>wget&nbsp;http://download.savannah.gnu.org/releases/confuse/confuse-2.7.tar.gz&nbsp;&nbsp;</span></span></li><li class=""><span>tar&nbsp;-xzvf&nbsp;&nbsp;confuse-2.7.tar.gz&nbsp;&nbsp;</span></li><li class="alt"><span>cd&nbsp;&nbsp;confuse-2.7&nbsp;&nbsp;&nbsp;</span></li><li class=""><span>./configure&nbsp;CFLAGS=-fPIC&nbsp;--disable-nls&nbsp;--prefix=/usr/local/confuse&nbsp;&nbsp;</span></li><li class="alt"><span>make&nbsp;&nbsp;</span></li><li class=""><span>make&nbsp;&nbsp;install&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="plain" style="display: none;">   wget http://download.savannah.gnu.org/releases/confuse/confuse-2.7.tar.gz
+   tar -xzvf  confuse-2.7.tar.gz
+   cd  confuse-2.7 
+   ./configure CFLAGS=-fPIC --disable-nls --prefix=/usr/local/confuse
+   make
+   make  install</pre><br>
+<p></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t15" target="_blank"></a>
+<span style="word-wrap:break-word"><strong><span style="font-family:Times New Roman; font-size:14px">&nbsp;5 安装rrdtool</span></strong></span></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="line-height:25.2000007629395px; word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px"></span></span></p>
+<div class="dp-highlighter bg_plain"><div class="bar"><div class="tools"><b>[plain]</b> <a href="http://blog..net/tryhl/article/details/44495191#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog..net/tryhl/article/details/44495191#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 393px; top: 5537px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_9" src="http://static.blog..net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_9" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=9&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog..net/tryhl/article/details/44495191#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog..net/tryhl/article/details/44495191#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1"><li class="alt"><span><span>wget&nbsp;&nbsp;http://oss.oetiker.ch/rrdtool/pub/rrdtool-1.4.8.tar.gz&nbsp;&nbsp;</span></span></li><li class=""><span>cd&nbsp;rrdtool-1.4.8&nbsp;&nbsp;</span></li><li class="alt"><span>./configure&nbsp;--prefix=/usr/local/rrdtool&nbsp;&nbsp;</span></li><li class=""><span>make&nbsp;&nbsp;</span></li><li class="alt"><span>make&nbsp;install&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="plain" style="display: none;">  wget  http://oss.oetiker.ch/rrdtool/pub/rrdtool-1.4.8.tar.gz
+  cd rrdtool-1.4.8
+  ./configure --prefix=/usr/local/rrdtool
+  make
+  make install</pre>
+<p></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; 然后运行&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; /usr/local/rrdtool/bin/rrdtool</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; 可以看到</span></span></p>
+<img src="./ganglia_files/182021d2k9sf79fn2s7wss.png" alt="">
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t16" target="_blank"></a>
+<strong><span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp;6 安装ganglia</span></span></strong></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; &nbsp;1）现在才是安装ganglia的开始，如果提示需要pcre的话</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px"><span style="white-space:pre"></span>&nbsp;yum&nbsp;install&nbsp;pcre&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp; &nbsp;2）下载ganglia-3.2.6，解压，安装&nbsp;</span><span style="line-height:25.2000007629395px">&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px"></span></span></p>
+<div class="dp-highlighter bg_plain"><div class="bar"><div class="tools"><b>[plain]</b> <a href="http://blog..net/tryhl/article/details/44495191#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog..net/tryhl/article/details/44495191#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 393px; top: 6107px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_10" src="http://static.blog..net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_10" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=10&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog..net/tryhl/article/details/44495191#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog..net/tryhl/article/details/44495191#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1"><li class="alt"><span><span>tar&nbsp;-xzvf&nbsp;ganglia-3.2.6.tar.gz&nbsp;&nbsp;</span></span></li><li class=""><span>./configure&nbsp;--with-librrd=/usr/local/rrdtool&nbsp;--with-gmetad&nbsp;--prefix=/usr/local/ganglia&nbsp;--with-&nbsp;&nbsp;&nbsp;&nbsp;libconfuse=/usr/local/confuse&nbsp;--enable-gexec&nbsp;&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="plain" style="display: none;">   tar -xzvf ganglia-3.2.6.tar.gz
+   ./configure --with-librrd=/usr/local/rrdtool --with-gmetad --prefix=/usr/local/ganglia --with-    libconfuse=/usr/local/confuse --enable-gexec </pre><br>
+<p></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; 如果出现下图所示，则正确</span></span></p>
+<img src="./ganglia_files/182056akcfvk8bfgvfg85g.png" alt="">
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp; 如果没有，请查看下面出错情况：</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;<strong><span style="color:#ff0000">出现的问题:</span></strong></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px"><strong><span style="color:#ff0000">&nbsp;</span></strong></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;<span style="color:#ff0000">Checking&nbsp;for&nbsp;confuse</span></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px; color:#ff0000">&nbsp; &nbsp;checking&nbsp;for&nbsp;cfg_parse&nbsp;in&nbsp;-lconfuse...&nbsp;no</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px; color:#ff0000">&nbsp; Trying&nbsp;harder&nbsp;including&nbsp;gettext</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px; color:#ff0000">&nbsp; checking&nbsp;for&nbsp;cfg_parse&nbsp;in&nbsp;-lconfuse...&nbsp;no</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px; color:#ff0000">&nbsp; Trying&nbsp;harder&nbsp;including&nbsp;iconv</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px; color:#ff0000">&nbsp; checking&nbsp;for&nbsp;cfg_parse&nbsp;in&nbsp;-lconfuse...&nbsp;No</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp;解决:&nbsp;yum&nbsp;install&nbsp;libconfuse-devel</span><span style="word-wrap:break-word">&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word"><br>
+</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px; color:#ff0000">&nbsp; checking&nbsp;pcre/pcre.h&nbsp;usability...&nbsp;no</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px; color:#ff0000">&nbsp; checking&nbsp;pcre/pcre.h&nbsp;presence...&nbsp;no</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px; color:#ff0000">&nbsp; checking&nbsp;for&nbsp;pcre/pcre.h...&nbsp;no</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px; color:#ff0000">&nbsp; checking&nbsp;pcre.h&nbsp;usability...&nbsp;no</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px; color:#ff0000">&nbsp; checking&nbsp;pcre.h&nbsp;presence...&nbsp;no</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px; color:#ff0000">&nbsp; checking&nbsp;for&nbsp;pcre.h...&nbsp;no</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px; color:#ff0000">&nbsp; checking&nbsp;for&nbsp;pcre_compile&nbsp;in&nbsp;-lpcre...&nbsp;no</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;解决:yum&nbsp;install&nbsp;pcre*&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px"><br>
+</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;解决好上述问题运行下面命令：</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; make&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; make&nbsp;install</span></span></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t17" target="_blank"></a>
+<span style="word-wrap:break-word"><strong><span style="font-family:Times New Roman; font-size:14px">&nbsp;7&nbsp;配置gmond（由于需要在每台机器安装gmond，则每台机器都要安装）</span></strong></span></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;拷贝gmond服务启动脚本</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp;cp&nbsp;/opt/soft_tar/ganglia-3.6.0/gmond/gmond.init&nbsp;&nbsp;/etc/rc.d/init.d/gmond</span><span style="word-wrap:break-word">&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; 创建配置文件主目录</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;mkdir&nbsp;/etc/ganglia&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; 拷贝gmond命令道/usr/sbin目录下</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;cp&nbsp;-f&nbsp;/usr/local/ganglia/sbin/gmond&nbsp;/usr/sbin/gmond</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; 生成gmond服务配置文件</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+etc/ganglia/gmond.conf&nbsp;&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; 加入gmond&nbsp;服务</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp;</span><span style="word-wrap:break-word">chkconfig&nbsp;--add&nbsp;gmond</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; 配置&nbsp;/etc/ganglia/gmond.conf</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp;</span><span style="word-wrap:break-word">红色部分发生改动</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp;&nbsp;</span><span style="word-wrap:break-word">globals&nbsp;{</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;daemonize&nbsp;=&nbsp;yes</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;setuid&nbsp;=&nbsp;yes</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px; color:#ff0000"><strong><span style="word-wrap:break-word">&nbsp;</span><span style="word-wrap:break-word">&nbsp;user&nbsp;=&nbsp;</span><span style="word-wrap:break-word">ganglia&nbsp;//运行ganglia用户</span></strong></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;debug_level&nbsp;=&nbsp;0</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;max_udp_msg_len&nbsp;=&nbsp;1472</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;mute&nbsp;=&nbsp;no</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;deaf&nbsp;=&nbsp;no</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;allow_extra_data&nbsp;=&nbsp;yes</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;host_dmax&nbsp;=&nbsp;86400&nbsp;/*secs.&nbsp;Expires&nbsp;(removes&nbsp;from&nbsp;web&nbsp;interface)&nbsp;hosts&nbsp;in&nbsp;1&nbsp;day&nbsp;*/</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;host_tmax&nbsp;=&nbsp;20&nbsp;/*secs&nbsp;*/</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;cleanup_threshold&nbsp;=&nbsp;300&nbsp;/*secs&nbsp;*/</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;gexec&nbsp;=&nbsp;no</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px; color:#ff0000"><strong><span style="word-wrap:break-word">&nbsp;</span><span style="word-wrap:break-word">&nbsp;send_metadata_interval&nbsp;=&nbsp;15&nbsp;/*多少秒发送一次&nbsp;*/</span></strong></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">}</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">cluster&nbsp;{</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp;</span><span style="color:#ff0000"><strong><span style="word-wrap:break-word">&nbsp;name&nbsp;=&nbsp;"mycluster"</span><span style="word-wrap:break-word">//集群名称，要与gmetad.conf名称一致</span></strong></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp;</span><span style="word-wrap:break-word">&nbsp;owner&nbsp;=&nbsp;"</span><span style="word-wrap:break-word">unspecified"//集群用户名称</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;latlong&nbsp;=&nbsp;"unspecified"</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;url&nbsp;=&nbsp;"unspecified"</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">}</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">host&nbsp;{</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;location&nbsp;=&nbsp;"unspecified"</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">}</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">udp_send_channel&nbsp;{</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px; color:#ff0000"><strong><span style="word-wrap:break-word">#mcast_join&nbsp;=&nbsp;239.2.11.71</span><span style="word-wrap:break-word">//注释掉用单播</span></strong></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px; color:#ff0000"><strong><span style="word-wrap:break-word">&nbsp;&nbsp;host&nbsp;=&nbsp;10.2.1.35</span><span style="word-wrap:break-word">//gmetad的机器</span></strong></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;port&nbsp;=&nbsp;8649</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;ttl&nbsp;=&nbsp;1</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">}</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">udp_recv_channel&nbsp;{</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px; color:#ff0000"><strong><span style="word-wrap:break-word">&nbsp;</span><span style="word-wrap:break-word">&nbsp;#mcast_join&nbsp;=&nbsp;239.2.11.71</span></strong></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px; color:#ff0000"><strong>&nbsp;&nbsp;port&nbsp;=&nbsp;8649</strong></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px; color:#ff0000"><strong>&nbsp;&nbsp;#bind&nbsp;=&nbsp;239.2.11.71</strong></span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;&nbsp;retry_bind&nbsp;=&nbsp;true</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">}</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;启动gmond</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; 运行&nbsp;service&nbsp;gmond&nbsp;start&nbsp;启动gmond</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px; color:#ff0000">&nbsp; 出现'/usr/local/ganglia/etc/gmond.conf'&nbsp;not&nbsp;found</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; 解决</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;ln&nbsp;-s&nbsp;/etc/ganglia/gmond.conf&nbsp;&nbsp;&nbsp;/usr/local/ganglia/etc/gmond.conf</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; 或者</span><span style="word-wrap:break-word">gmond&nbsp;--default_config&nbsp;&gt;&nbsp;/etc/ganglia/gmond.conf</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp;重新启动gmond：service&nbsp;gmond&nbsp;restart.</span><span style="word-wrap:break-word">&nbsp;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; 测试数据</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; 在gmetad机器上运行&nbsp;tcpdump&nbsp;-i&nbsp;eth0&nbsp;udp&nbsp;port&nbsp;8649，或者telnet&nbsp;localhost&nbsp;8649</span></span></p>
+<img src="./ganglia_files/182340tia99knjjq9kipig.png" alt="">
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t18" target="_blank"></a>
+<span style="word-wrap:break-word"><strong><span style="font-family:Times New Roman; font-size:14px">8 安装配置gmetad</span></strong></span></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;</span></span></p>
+<div class="dp-highlighter bg_plain"><div class="bar"><div class="tools"><b>[plain]</b> <a href="http://blog..net/tryhl/article/details/44495191#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;" target="_blank">view plain</a><span data-mod="popu_168"> <a href="http://blog..net/tryhl/article/details/44495191#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;" target="_blank">copy</a><div style="position: absolute; left: 393px; top: 8861px; width: 18px; height: 18px; z-index: 99;"><embed id="ZeroClipboardMovie_11" src="http://static.blog..net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="18" height="18" name="ZeroClipboardMovie_11" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=11&amp;width=18&amp;height=18" wmode="transparent"></div></span><span data-mod="popu_169"> <a href="http://blog..net/tryhl/article/details/44495191#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;" target="_blank">print</a></span><a href="http://blog..net/tryhl/article/details/44495191#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;" target="_blank">?</a></div></div><ol start="1"><li class="alt"><span><span>1)同上配置环境&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp&nbsp;gmetad/gmetad.Init&nbsp;/etc/rc.d/Init.d/gmetad&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//拷贝gmetad服务启动脚本&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mkdir&nbsp;/etc/ganglia&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//创建配置文件主目录&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp&nbsp;gmetad/gmetad.conf&nbsp;/etc/ganglia/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//拷贝gmetad服务配置文件&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mkdir&nbsp;-p&nbsp;/var/lib/ganglia/rrds&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//创建rrd文件存放目录&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp&nbsp;-f&nbsp;/usr/local/ganglia/sbin/gmetad&nbsp;/usr/sbin/gmetad&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chkconfig&nbsp;--add&nbsp;gmetad&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chown&nbsp;nobody:nobody&nbsp;/var/lib/ganglia/rrds&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//属主和属组都为nobody&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chkconfig&nbsp;--add&nbsp;gmetad&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;cp&nbsp;/opt/soft_tar/ganglia-3.6.0/gmetad/gmetad.conf&nbsp;&nbsp;/etc/ganglia/&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;2)&nbsp;配置gmetad.conf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;data_source&nbsp;"mycluster"&nbsp;10.2.1.80&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;3)&nbsp;启动gmetad&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;service&nbsp;gmetad&nbsp;start&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;可以运行&nbsp;telnet&nbsp;localhost&nbsp;8651查看是否正常启动&nbsp;&nbsp;</span></li></ol></div><pre name="code" class="plain" style="display: none;">  1)同上配置环境
+       cp gmetad/gmetad.Init /etc/rc.d/Init.d/gmetad     //拷贝gmetad服务启动脚本
+       mkdir /etc/ganglia                                             //创建配置文件主目录
+       cp gmetad/gmetad.conf /etc/ganglia/                  //拷贝gmetad服务配置文件
+       mkdir -p /var/lib/ganglia/rrds                                //创建rrd文件存放目录
+       cp -f /usr/local/ganglia/sbin/gmetad /usr/sbin/gmetad
+       chkconfig --add gmetad
+       chown nobody:nobody /var/lib/ganglia/rrds           //属主和属组都为nobody
+       chkconfig --add gmetad    
+      cp /opt/soft_tar/ganglia-3.6.0/gmetad/gmetad.conf  /etc/ganglia/
+    2) 配置gmetad.conf   
+     data_source "mycluster" 10.2.1.80
+    3) 启动gmetad
+      service gmetad start
+      可以运行 telnet localhost 8651查看是否正常启动</pre>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t19" target="_blank"></a>
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px"><br>
+</span></span><span style="word-wrap:break-word"><strong><span style="font-family:Times New Roman; font-size:14px">&nbsp;9&nbsp;安装php以及apache</span></strong></span></h2>
+<p></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;PHP程序需要依赖Apache来运行，因此需要安装如下依赖</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;1)安装</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; yum&nbsp;-y&nbsp;install&nbsp;php&nbsp;httpd</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;2)启动</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; service&nbsp;httpd&nbsp;start&nbsp;//启动httpd&nbsp;服务</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; 3)</span><span style="word-wrap:break-word">测试php</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; vi&nbsp;/var/www/html/index.php</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;输入：</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &lt;?php</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; phpinfo();</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; ?&gt;</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; 保存，然后浏览器&nbsp;master/index.php&nbsp;</span><span style="word-wrap:break-word">&nbsp;</span></span></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t20" target="_blank"></a>
+<span style="word-wrap:break-word"><strong><span style="font-family:Times New Roman; font-size:14px">&nbsp;10&nbsp;安装ganglia-web</span></strong></span></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; 下载，解压</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+http://jaist.dl.sourceforge.net/project/ganglia/ganglia-web/3.6.2/ganglia-web-3.6.2.tar.gz
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp;解压</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; cd&nbsp;ganglia-web-3.6.2</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; vim&nbsp;Makefile源文件</span></span></p>
+<img src="./ganglia_files/182607xmccmum65xu6x1ju.png" alt="">
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">修改如下</span></span></p>
+<img src="./ganglia_files/182608scctamis8zngn0aa.png" alt="">
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; 执行</span><span style="word-wrap:break-word">make&nbsp;install</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; 最后在/var/www/html/ganglia文件夹下，</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;cp&nbsp;conf_default.php&nbsp;&nbsp;conf.php</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">&nbsp; &nbsp;vim&nbsp;conf.php，修改</span></span></p>
+<img src="./ganglia_files/182652ee17ugax61p7pddr.png" alt="">
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp; &nbsp; 这里修改为本地安装的rrdtool的bin路径</span><span style="word-wrap:break-word">&nbsp;</span></span></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t21" target="_blank"></a>
+<strong><span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp;11&nbsp;</span><span style="word-wrap:break-word">修改rrds路径的权限</span></span></strong></h2>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="word-wrap:break-word"><span style="font-family:Times New Roman; font-size:14px">chown&nbsp;&nbsp;-R&nbsp;nobody:nobody&nbsp;/var/lib/ganglia/rrds</span></span></p>
+<p style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">chmod&nbsp;</span><span style="word-wrap:break-word">-R&nbsp;755&nbsp;/var/lib/ganglia/rrds</span><span style="word-wrap:break-word">&nbsp;</span></span></p>
+<h2 style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px"><a name="t22" target="_blank"></a>
+<strong><span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">&nbsp;12&nbsp;</span><span style="word-wrap:break-word">启动gmond&nbsp;gmetad&nbsp;httpd访问即可</span></span></strong></h2>
+<img src="./ganglia_files/182727wln3uksny4zlzsnn.png" alt="">
+<p><span style="font-family:Times New Roman; font-size:14px"><br>
+</span></p>
+<h1><a name="t23" target="_blank"></a><strong><span style="font-family:Times New Roman; font-size:24px">4 集成hadoop，hbase到ganglia中</span></strong></h1>
+<h2><a name="t24" target="_blank"></a><strong><span style="font-family:Times New Roman; font-size:14px">&nbsp; 1 配置hadoop</span></strong></h2>
+<p start="" style="word-wrap:break-word; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; line-height:25.2000007629395px">
+<span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word"><strong>&nbsp;
+</strong>&nbsp;在${HADOOP_HOME}/etc/hadoop/</span>hadoop-metrics2.properties中<strong>&nbsp;</strong><span style="word-wrap:break-word">把原来的全部注释掉，加上下面的，重启启动即可</span><span style="word-wrap:break-word">&nbsp;</span></span></p>
+<pre name="code" class="plain">  *.sink.ganglia.class=org.apache.hadoop.metrics2.sink.ganglia.GangliaSink31
+  *.sink.ganglia.period=10
+  *.sink.ganglia.slope=jvm.metrics.gcCount=zero,jvm.metrics.memHeapUsedM=both
+  *.sink.ganglia.dmax=jvm.metrics.threadsBlocked=70,jvm.metrics.memHeapUsedM=40
+  namenode.sink.ganglia.servers=server-35:8649
+  resourcemanager.sink.ganglia.servers=server-35:8649
+  datanode.sink.ganglia.servers=server-35:8649
+  nodemanager.sink.ganglia.servers=server-35:8649
+  maptask.sink.ganglia.servers=server-35:8649
+  reducetask.sink.ganglia.servers=server-35:8649</pre>
+<p></p>
+<h2><strong><span style="font-family:Times New Roman; font-size:14px">2 配置Hbase</span></strong></h2>
+<p><span style="font-family:Times New Roman; font-size:14px"><span style="word-wrap:break-word">在${HADOOP_HOME}/etc/hadoop/</span><span style="word-wrap:break-word">hadoop-metrics2-hbase.properties</span><span style="word-wrap:break-word">中<strong>&nbsp;</strong><span style="word-wrap:break-word">把原来的全部注释掉，加上下面的，重启启动即可</span><span style="word-wrap:break-word">&nbsp;</span></span></span></p>
+<pre name="code" class="plain"> .sink.ganglia.class=org.apache.hadoop.metrics2.sink.ganglia.GangliaSink31
+ *.sink.ganglia.period=10
+ hbase.sink.ganglia.period=10
+ hbase.sink.ganglia.servers=server-35:8649</pre>
