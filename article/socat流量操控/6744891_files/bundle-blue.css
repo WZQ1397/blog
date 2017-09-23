@@ -1,0 +1,65 @@
+/* Minification failed. Returning unminified contents.
+(242,25): run-time error CSS1062: Expected semicolon or closing curly-brace, found ':'
+ */
+
+body p {
+    voice-family: inherit;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    color: #333;
+    font-family: verdana,arial,helvetica,sans-serif;
+    font-size: 13px;
+}
+
+h1, h2, h3, h4 {
+    text-decoration: none;
+    color: #006bad;
+    background-color: #fff;
+}
+
+h1 {
+    font-size: 30px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 16px;
+}
+
+h4 {
+    font-size: 16px;
+}
+
+.pagelayout {
+    background: #fff;
+    position: absolute;
+    top: 15px;
+    margin: 5px 5px 5px 5px;
+}
+
+
+.centercolumn {
+    padding: 10px;
+    margin-left: 30px;
+}
+
+.imageFrame {
+    border: 0;
+    text-align: center;
+}
+
+.singleposttitle {
+    color: #006bad;
+    font-size: 22px;
+    background-color: #fff;
+    font-weight: bold;
+}
+
+
