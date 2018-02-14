@@ -1,0 +1,837 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>
+			快速提高MySQL性能的7个技巧
+		</title>
+		<link rel="stylesheet" type="text/css" href="../css/wxstyle.css" />
+		<style type="text/css">
+			@import url("../css/wxstyle.css");
+		</style>
+		<div id="js_article" class="rich_media">
+			<div class="rich_media_inner">
+				<div id="page-content" class="rich_media_area_primary">
+					<div id="img-content">
+						<h2 class="rich_media_title" id="activity-name">
+							快速提高MySQL性能的7个技巧
+						</h2>
+						<div class="rich_media_content " id="js_content">
+							测量应用程序的方法之一是看性能。而性能的指标之一便是用户体验，通俗的说法就是“用户是否需要等待更长的时间才能得到他们想要的东西”。
+							</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									这个指标在不同的应用场合而有所改变。对于移动购物应用，响应时间不能超过几秒钟。对于员工的人力资源页面，可能需要多花几秒钟的时间。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									有很多关于性能如何影响用户行为的研究：
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<ul class="list-paddingleft-2" style="">
+								<li>
+									<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+											79%的客户不太可能回到慢速网站
+										</span>
+									</p>
+								</li>
+								<li>
+									<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+											47%的消费者希望网页在2秒或更短的时间内完成加载
+										</span>
+									</p>
+								</li>
+								<li>
+									<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+											40%的用户在网站加载时间超过3秒时会放弃
+										</span>
+									</p>
+								</li>
+								<li>
+									<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+											页面加载时间的1秒延迟可能会导致7%的损失，页面浏览量减少11%
+										</span>
+									</p>
+								</li>
+							</ul>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									无论采用何种标准，都必须保持良好的应用性能。否则，用户会抱怨(或者更糟的是，转到不同的应用程序)。影响应用程序性能的因素之一是数据库性能。应用程序、网站和数据库之间的交互对于建立应用程序性能的好坏至关重要。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									这种交互的一个核心组件是应用程序如何查询数据库以及数据库如何响应请求。无论如何，MySQL都是最受欢迎的数据库管理系统之一。在生产环境中，越来越多的企业正在转向使用MySQL(和其他开源数据库)作为数据库解决方案。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									有许多配置MySQL的方法可以帮助确保数据库对查询作出快速响应，并使应用程序性能降低到最低限度。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									以下是帮助优化MySQL数据库性能的一些基本技巧。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;text-align: center;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;color: rgb(171, 25, 66);font-size: 18px;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+											优化技巧#1：学习如何使用EXPLAIN
+										</span>
+									</strong>
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									使用任何数据库所做的两个最重要的决定是设计应用程序实体之间的关系如何映射到表(数据库模式)，以及设计应用程序如何以所需的格式获得所需的数据(查询)。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									复杂的应用程序可以有复杂的模式和查询。如果想得到应用程序所需要的性能和扩展性，不能仅仅依靠直觉来理解如何执行查询。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									应该学习如何使用EXPLAIN命令，而不是随意的猜测和想象。此命令展示了如何执行查询，并让您了解所期望的性能，以及查询将如何随着数据大小的变化而伸缩。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									有许多工具–比如MySQLWorkbench–可以可视化EXPLAIN输出，但仍然需要理解基础知识才能理解它。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									EXPLAIN命令提供输出的有两种不同的格式：老式的表格式和更现代的结构化JSON文档，它提供了更多的细节(如下所示)：
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<blockquote style="max-width: 100%;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										mysql&gt;explain format=json select avg(k)from sbtest1 where id between
+										1000 and 2000\G
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										***************************1.row***************************
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										EXPLAIN:{
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;“query_block”:{
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;“select_id”:1,
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;“cost_info”:{
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;“query_cost”:“762.40”
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp},
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;“table”:{
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;“table_name”:“sbtest1”,
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;“access_type”:“range”,
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;“possible_keys”:[
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;&nbsp;“PRIMARY”
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;],
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;“key”:“PRIMARY”,
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;“used_key_parts”:[
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;&nbsp;“id”
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;],
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;“key_length”:“4”,
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;“rows_examined_per_scan”:1874,
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;“rows_produced_per_join”:1874,
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;“filtered”:“100.00”,
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;“cost_info”:{
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;&nbsp;“read_cost”:“387.60”,
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;&nbsp;“eval_cost”:“374.80”,
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;&nbsp;“prefix_cost”:“762.40”,
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;&nbsp;“data_read_per_join”:“351K”
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp},
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;“used_columns”:[
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;&nbsp;“id”,
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;&nbsp;“k”
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;],
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp;&nbsp;“attached_condition”:“(`sbtest`.`sbtest1`.`id`between
+										1000 and 2000)”
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp;&nbsp}
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										&nbsp}
+									</span>
+								</p>
+								<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+									<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;color: rgb(136, 136, 136);box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+										}
+									</span>
+								</p>
+							</blockquote>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									应该查看的一个组件是“query cost”。query cost是指MySQL根据查询执行的总开销来考虑这个特定查询的代价，并且基于许多不同的因素。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									简单查询的查询开销通常小于1，000。开销在1，000到100，000之间的查询被认为是中等开销的查询，而且如果每秒只运行数百个这样的查询(而不是数万个)，通常会比较快。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									开销超过100，000的查询可以当作是昂贵的。通常，当您是系统上的单个用户时，这些查询仍会快速运行，但您应该仔细考虑在交互式应用程序中使用此类查询的频率(尤其是随着用户数量的增长)。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									当然，这些数字只是性能的一个大概的体现，但它们展示了一般原则。您的系统可能更好地处理查询工作负载，也可能更糟，这取决于其体系结构和配置。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									决定查询开销的主要因素是查询是否正确使用索引。EXPLAIN命令可以告诉您查询是否使用索引(通常是因为索引是如何在数据库中创建的，或者查询本身是如何设计的)。这就是为什么学会使用EXPLAIN是如此重要。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;text-align: center;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;color: rgb(171, 25, 66);box-sizing: border-box !important;word-wrap: break-word !important;">
+									<strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+											优化技巧#2：创建正确的索引
+										</span>
+									</strong>
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									索引通过减少查询必须扫描的数据库中的数据量来提高查询效率。MySQL中的索引用于加速数据库中的访问，并帮助执行数据库约束(如UNIQUE和FOREIGN
+									KEY)。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									数据库索引很像图书索引。它们被保存在自己的位置，并且包含主数据库中已经存在的信息。它们是指向数据所在位置的参考方法或映射。索引不会更改数据库中的任何数据。它们只是指向数据的位置。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									没有完全适用于任何工作负载的索引。而应该始终在系统运行的查询上下文中查看索引。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									索引良好的数据库不仅运行得更快，而且即使缺少一个索引也会使数据库慢如蜗牛。使用EXPLAIN(如前所述)查找缺少的索引并添加它们。但是要小心：不要添加你不需要的索引！不必要的索引会降低数据库的速度&nbsp;
+								</span>
+								<span style="max-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;">
+									(请查看关于MySQL索引最佳实践的介绍：https:
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;text-align: center;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;color: rgb(171, 25, 66);box-sizing: border-box !important;word-wrap: break-word !important;">
+									<strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+											优化技巧#3：拒绝使用默认设置
+										</span>
+									</strong>
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									与任何软件一样，MySQL有许多可配置的设置，可用于修改行为(以及最终的性能)。与任何软件一样，管理员忽略了许多这些可配置的设置，最终在默认模式下使用。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									要从MySQL中获得最佳性能，了解可配置的的MySQL设置是非常重要的，更重要的是将它们设置为最适合您的数据库环境。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									默认情况下，MySQL用于小规模的开发安装，而不是生产规模。您通常希望配置MySQL以使用所有可用的内存资源，并允许应用程序需要的连接数量。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									下面是三个MySQL性能优化设置，您应该始终仔细检查：
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									innodb_ buffer_ pool_size:缓冲池用于存放缓存数据和索引。这是使用具有大容量RAM的系统作为数据库服务器的主要原因。如果只运行InnoDB存储引擎，通常会将80%的内存分配给缓冲池。如果您正在运行非常复杂的查询，或者有大量的并发数据库连接，或大量的表，可能需要将此值降低一个档次，以便为其他操作分配更多的内存。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									在设置InnoDB缓冲池大小时，需要确保不要设置得太大，否则会导致交换。这绝对会影响数据库性能。一种简单的检查方法是查看Percona Monitoring
+									and Management中的系统概述图中的交换活动：
+								</span>
+								<img src="./快速提高 MySQL 性能的 7 个技巧_files/641">
+								如图所示，有时进行一些交换是可以的。但是，如果看到持续每秒1MB或更多的交换活动，则需要减少缓冲池大小(或其他内存使用)。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									如果在第一次访问时没有正确地获得innodb_ Buffer_ pool_ size的值，不用担心。从MySQL5.7开始，便可以动态更改InnoDB缓冲池的大小，而无需重新启动数据库服务器。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									innodb_ log_ file_ size：这是单个InnoDB日志文件的大小。默认情况下，InnoDB使用两个值，这样您就可以将这个数字加倍，从而获得InnoDB用于确保事务持久的循环重做日志空间的大小。这也优化了将更改应用到数据库。设置innodb_
+									log_ file_ size是一个权衡的问题。分配的重做空间越大，对于写密集型工作负载而言，性能就越好，但是如果系统断电或出现其他问题，崩溃恢复的时间就越长。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									如何知道MySQL的性能是否受到当前InnoDB日志文件大小的限制？可以通过查看实际使用了多少可用的重做日志空间来判断。最简单的方法是查看Percona
+									Monitor and Management InnoDB Metrics仪表板。在下图中，InnoDB日志文件的大小不够大，因为使用的空间非常接近可用的重做日志空间(由红线表示)。日志文件的大小应该至少比保持系统最佳运行所用的空间大20%。
+								</span>
+								<img src="./快速提高 MySQL 性能的 7 个技巧_files/642">
+								MAX_ Connections：大型应用程序连接数通常需高于默认值。不同于其它变量，如果没有正确设置它，就不会有性能问题(本身)。相反，如果连接的数量不足以满足您的应用程序的需要，那么您的应用程序将无法连接到数据库(在您的用户看来，这就像是停机时间)。所以正确处理这个变量很重要。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									如果在多个服务器上运行多个组件的复杂应用程序，很难知道需要多少连接。幸运的是，MySQL可以很容易地看到在峰值操作时使用了多少连接。通常，您希望确保应用程序使用的最大连接数与可用的最大连接数之间至少有30%的差距。查看这些数字的一种简单方法是在Percona监控和管理的MySQL概述仪表板中使用MySQL连接图。下图显示了一个健全的系统，其中有大量的附加连接可用。
+								</span>
+								<img src="./快速提高 MySQL 性能的 7 个技巧_files/643">
+								需要记住的一点是，如果数据库运行缓慢，应用程序通常会创建过多的连接。在这种情况下，您应该处理数据库的性能问题，而不是简单地允许更多的连接。更多的连接会使底层的性能问题变得更糟。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									(注意：当将max_Connections变量设置为明显高于默认值时，通常需要考虑增加其他参数，如表缓存的大小和打开的MySQL文件的数量。但是，这不属于本文讨论的范畴。)
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;text-align: center;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;color: rgb(171, 25, 66);box-sizing: border-box !important;word-wrap: break-word !important;">
+									<strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+											优化技巧#4：将数据库保存在内存中
+										</span>
+									</strong>
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									近年来，我们看到了向固态磁盘(SSD)的过渡。尽管SSD比旋转硬盘快得多，但它们仍然无法与RAM中的数据相比。这种差异不仅来自存储性能本身，还来自数据库在从磁盘或SSD存储中检索数据时必须做的额外工作。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									随着最新硬件的改进，无论是在云端运行还是管理自己的硬件，都越来越有可能将数据库存储在内存中。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									更好的消息是，您不需要将所有数据库都放入内存中，就可以获得内存中的大部分性能优势。您只需将工作数据（最频繁访问的数据）集存入内存中。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									你可能已经看到一些文章提供了一些具体的数字，说明应该将数据库的哪个部分保存在内存中，从10%到33%不等。事实上，没有“一刀切”的数字。适合内存的最佳性能优势的数据量与工作负载相关。与其寻找一个特定的“万能”数字，不如检查一下数据库在其稳定状态下运行的I/O(通常在启动后几个小时)。看看READ，因为如果数据库在内存中，则可以完全消除READ。写总是需要发生的，不管你有多少内存可用。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									下面，您可以在Percona监控和管理的InnoDBMetrics仪表板中的InnoDB I/O图中看到I/O。
+								</span>
+								<img src="./快速提高 MySQL 性能的 7 个技巧_files/644">
+								在上面的图表中，您可以看到高达每秒2，000个I/O操作的峰值，这表明(至少对于工作负载的某些部分)数据库工作集不适合内存。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;text-align: center;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;color: rgb(171, 25, 66);box-sizing: border-box !important;word-wrap: break-word !important;">
+									<strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+											优化技巧#5：使用SSD存储
+										</span>
+									</strong>
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									如果您的数据库不适合内存(即使不适合)，您仍然需要快速存储来处理写操作，并在数据库升温时(重新启动后)避免性能问题。如今，SSD即是快速存储的代名词。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									出于成本或可靠性的原因，一些“专家”仍然主张使用旋转磁盘（机械磁盘）。坦率地说，当涉及到操作数据库时，这些论点往往已经过时或完全错误。今天，SSD以较高的价格提供着可观的性能和可靠性。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									然而，并非所有SSD都是适用的。对于数据库服务器，您应该使用为服务器工作负载设计的SSD，这种SSD会对数据起到保护作用(例如，在断电期间)。避免使用为台式计算机和笔记本电脑设计的商用SSD。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									通过NVMe或Intel OpTan技术连接的SSD可提供最佳性能。即使作为SAN、NAS或cloud block设备远程连接，与旋转磁盘相比，SSD仍然具有更优越的性能。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;text-align: center;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;color: rgb(171, 25, 66);box-sizing: border-box !important;word-wrap: break-word !important;">
+									<strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+											优化技巧#6：横向扩展
+										</span>
+									</strong>
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									即使是高性能的服务器也有其局限性。有两种扩展方式：up和out。纵向扩展意味着购买更多的硬件。这可能很昂贵，而且硬件很快就会过时。横向扩展以处理更多的负载有几个好处：
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<ol class="list-paddingleft-2" style="">
+								<li>
+									<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+											可以利用较小且成本较低的系统。
+										</span>
+									</p>
+									<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+									</p>
+								</li>
+								<li>
+									<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+											通过横向扩展，进行线性扩展更快更容易。
+										</span>
+									</p>
+									<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+									</p>
+								</li>
+								<li>
+									<p style="max-width: 100%;min-height: 1em;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+											因为数据库分布在多台物理机器上，所以数据库不会受到单个硬件故障点的影响。
+										</span>
+									</p>
+								</li>
+							</ol>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									虽然横向扩展是有好处的，但也有一定的局限性。扩展需要复制，例如基本的MySQL复制或Percona XtraDB Cluster，以实现数据同步。但是作为回报，可以获得额外的性能和高可用性。如果您需要更大的扩展，请使用MySQL分片。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									您还需要确保连接到集群体系结构的应用程序能够找到所需的数据–通常通过一些代理服务器和负载平衡器(如ProxySQL或HAProxy)。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									在计划横向扩展时，避免过早地扩展。使用分布式数据库往往更复杂。现代硬件和MySQL服务器只使用一台服务器就可以得到良好的体验。最近发布的MySQL
+									8候选版本表明，它能够在单个系统上处理200多万个简单查询。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;text-align: center;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;color: rgb(171, 25, 66);box-sizing: border-box !important;word-wrap: break-word !important;">
+									<strong style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+										<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+											优化技巧#7：可观测性
+										</span>
+									</strong>
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									设计最好的系统时要考虑到可观察性-MySQL也不例外.。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									一旦您启动、运行并正确调整了MySQL环境，就不能仅仅设置而不进行管理。数据库环境会受到系统或工作负载更改的影响。准备好应对诸如流量高峰、应用程序错误和MySQL故障等意外。这些事情能够而且将会发生。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									当发生问题时，你需要迅速而有效地解决它们。这样做的唯一方法是设置某种监视解决方案并对其进行适当的初始化。这使您能够在数据库环境在生产中运行时看到它正在发生的情况，并在出现问题时分析服务器数据。理想情况下，系统允许您在问题发生之前或在问题发展到用户可以看到其影响之前进行预防。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									监控工具有诸如MySQL Enterprise Monitor、Monyog和Percona Monitoring and Management(PMM)，后者具有免费和开源的额外优势。这些工具为监视和故障排除提供了很好的可操作性。
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									<br style="max-width: 100%;box-sizing: border-box !important;word-wrap: break-word !important;">
+								</span>
+							</p>
+							<p style="max-width: 100%;min-height: 1em;color: rgb(62, 62, 62);font-size: 16px;line-height: 25.6px;white-space: normal;widows: 1;background-color: rgb(255, 255, 255);box-sizing: border-box !important;word-wrap: break-word !important;">
+								<span style="max-width: 100%;-webkit-max-logical-width: 100%;font-family: 微软雅黑;box-sizing: border-box !important;word-wrap: break-word !important;outline: none 0px !important;">
+									随着越来越多的公司转向开源数据库(特别是MySQL)，以便在大规模生产环境中管理和服务其业务数据，他们将需要集中精力保持这些数据库的优化和最佳运行效率。与所有对您的业务目标至关重要的事情一样，您的数据库性能可能会导致或破坏你的业务目标或成果。MySQL是一个可以为应用程序和网站提供优质的数据库解决方案，但需要进行调整以满足您的需要，并进行监视以发现和防止瓶颈和性能问题。
+
+</html>
